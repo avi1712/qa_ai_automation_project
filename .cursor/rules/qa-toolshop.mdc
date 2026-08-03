@@ -1,0 +1,18 @@
+---
+description: QA AI Practical Assessment — Toolshop workflow rules
+globs:
+alwaysApply: true
+---
+
+# Toolshop QA Assessment Rules
+
+- SUT UI: https://practicesoftwaretesting.com/
+- SUT API: https://api.practicesoftwaretesting.com
+- Stack: Playwright with Prism-style structure (UI + API)
+- Cap: 5–8 test cases per type (manual, UI, API); tag @Smoke and @Regression
+- UI invoice: press Confirm **twice**
+- Core payment: cash-on-delivery
+- Never invent API endpoints or selectors — verify against live SUT / OpenAPI
+- One task per chat; summarize into ai-prompts/*.md after each phase
+- Do not commit secrets, real PII, or raw bearer tokens
+- Prefer Auto/Composer for docs; coding model only for automation and hard debugging

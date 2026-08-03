@@ -1,0 +1,15 @@
+node_modules/
+reports/playwright-report/**
+!reports/playwright-report/.gitkeep
+reports/test-results/**
+!reports/test-results/.gitkeep
+test-results/
+playwright-report/
+.env
+*.log
+
+# Playwright
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
