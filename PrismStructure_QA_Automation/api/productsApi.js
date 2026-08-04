@@ -9,4 +9,16 @@ async function getProducts(request, params = {}) {
   return response;
 }
 
-module.exports = { getProducts};
+/**
+ * @param {import('@playwright/test').APIRequestContext} request
+ * @param {string} query
+ */
+async function searchProducts(request, query) {
+  console.log('[productsApi] GET /products/search');
+  const response = await request.get('/products/search', { params: { q: query } });
+  console.log('[productsApi]  get products by search query status:', response.status());
+  return response;
+}
+
+
+module.exports = { getProducts, searchProducts};
