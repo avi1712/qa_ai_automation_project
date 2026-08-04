@@ -5,7 +5,7 @@ const { ProductPage } = require('../pages/ProductPage');
 const { CartPage } = require('../pages/CartPage');
 const { CheckoutPage } = require('../pages/CheckoutPage');
 const { ProfilePage } = require('../pages/ProfilePage');
-const { buildUniqueUser } = require('../utils/dataFactory');
+const { buildUniqueUser } = require('../utils/payloadBuilder');
 
 /**
  * Prism fixtures — wires page objects + unique user for each test

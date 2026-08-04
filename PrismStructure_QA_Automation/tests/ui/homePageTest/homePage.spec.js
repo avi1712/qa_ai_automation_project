@@ -1,21 +1,8 @@
 const { test, expect } = require('@playwright/test');
 const { LoginPage } = require('../../../pages/LoginPage');
 const { RegisterPage } = require('../../../pages/RegisterPage');
-const credentials = require('../../../test-data/credentials.json');
 const userData = require('../../../test-data/user.json');
 
-/**
- * UI Smoke — Auth
- * TC-UI-01 @Smoke — Register → Login → Profile
- * Enable after verifying data-test locators on live Toolshop.
- */
-// test.describe('Login to the application', () => {
-//   test('TC-UI-01 login to the application @Smoke', async ({ page }) => {
-//     const loginPage = new LoginPage(page);
-//     await loginPage.goto();
-//     await loginPage.verifyLoginAndNavigateToHomePage(credentials.email, credentials.password);
-//   });
-// });
 
 test.describe('Register to the application', () => {
   test('TC-UI-01 register to the application @Smoke', async ({ page }) => {
@@ -45,9 +32,9 @@ test.describe('Register to the application', () => {
       },
     });
 
-    console.log('[TC-UI-02] Registration done — starting login with same email');
+    console.log('[TC-UI-01] Registration done — starting login with same email');
     const loginPage = new LoginPage(page);
-    await loginPage.verifyLoginAndNavigateToHomePage(randomEmail, credentials.password);
-    console.log('[TC-UI-02] Test completed successfully');
+    await loginPage.verifyLoginAndNavigateToHomePage(randomEmail, user.password);
+    console.log('[TC-UI-01] Test completed successfully');
   });
 });

@@ -56,9 +56,22 @@ Tree matches assessment layout; `ProfilePage.js` retained (used by auth/checkout
 
 ---
 
+## Entry 5 — API AC1/AC2 five tests (live verified)
+
+**Prompt:**  
+Implement 5 API tests (Smoke + Regression) for Toolshop AC1/AC2 against live API; separate API project; logs per action; execute.
+
+**AI Response Summary:**  
+Verified live: register needs `address` object + non-leaked password; add item via `POST /carts/{id}`; invoice COD `201` with Bearer. Added `api` Playwright project (`baseURL` api host), helpers + `apiLogger`, 3 smoke + 2 regression. All 5 passed (~10s).
+
+**Validation Notes:**  
+Folder: `PrismStructure_QA_Automation`. Run: `npx playwright test --project=api`.
+
+---
+
 ## Part B log (append after runs)
 
-_No execution failures yet — Part A only._
+_API suite green (2026-08-03). UI failures append below when encountered._
 
 <!--
 ### Failure entry template

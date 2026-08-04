@@ -44,7 +44,6 @@ PrismStructure/
 │   └── testFixtures.js
 │
 ├── utils/                        # shared helpers
-│   ├── dataFactory.js
 │   └── payloadBuilder.js
 │
 ├── test-data/                    # static/sample data
