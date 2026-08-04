@@ -1,3 +1,4 @@
+const { expect } = require('@playwright/test');
 const { BasePage } = require('./BasePage');
 
 /**
@@ -11,10 +12,19 @@ class ProductPage extends BasePage {
     this.searchBtn = this.locator('[data-test="search-submit"]');
     this.productCards = this.locator('[data-test^="product-"]');
     this.addToCartBtn = this.locator('[data-test="add-to-cart"]');
+    this.productName = this.locator('[data-test="product-name"]');
+    this.toastMessage = this.locator('.toast-message');
   }
 
   async gotoHome() {
     await super.goto('/');
+  }
+
+  /** Wait for the product detail page to fully render (Angular SPA needs explicit wait). */
+  async waitForPageLoad() {
+    await this.addToCartBtn.waitFor({ state: 'visible', timeout: 15000 });
+    await expect(this.productName).toBeVisible();
+    console.log('[ProductPage] Product detail loaded:', await this.productName.textContent());
   }
 
   /** @param {string} query */
@@ -28,7 +38,21 @@ class ProductPage extends BasePage {
   }
 
   async addToCart() {
+    console.log('[ProductPage] Clicking Add to cart');
     await this.addToCartBtn.click();
+    console.log('[ProductPage] Add to cart clicked');
+  }
+
+  /** Verify the toast notification message after adding to cart. */
+  async addToCartAndVerifyToastMessage() {
+    await this.waitForPageLoad();
+    await this.addToCart();
+    await this.toastMessage.waitFor({ state: 'visible', timeout: 6000 });
+    const text = await this.toastMessage.textContent();
+    await expect(this.toastMessage).toContainText('Product added to shopping cart');
+    console.log('[ProductPage] Toast verified:', text?.trim());
+    await this.toastMessage.waitFor({ state: 'hidden', timeout: 10000 });
+    console.log('[ProductPage] Toast dismissed');
   }
 }
 

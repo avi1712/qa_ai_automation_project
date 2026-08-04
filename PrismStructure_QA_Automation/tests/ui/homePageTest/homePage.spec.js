@@ -6,7 +6,7 @@ const userData = require('../../../test-data/user.json');
 
 test.describe('Register to the application', () => {
   test('TC-UI-01 register to the application @Smoke', async ({ page }) => {
-    console.log('[TC-UI-02] Test started: Register then Login');
+    console.log('[TC-UI-01] Test started: Register then Login');
 
     const registerPage = new RegisterPage(page);
     await registerPage.goto();
@@ -37,4 +37,6 @@ test.describe('Register to the application', () => {
     await loginPage.verifyLoginAndNavigateToHomePage(randomEmail, user.password);
     console.log('[TC-UI-01] Test completed successfully');
   });
+
+  
 });
