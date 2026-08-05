@@ -37,9 +37,14 @@ class HomePage extends BasePage {
   /** Open base URL, maximize window, wait for page load. */
   async goto() {
     console.log('[HomePage] Opening home page');
-    await this.maximize();
-    await super.goto('/');
-    console.log('[HomePage] Home page loaded');
+    try {
+      await this.maximize();
+      await super.goto('/');
+      console.log('[HomePage] Home page loaded');
+    } catch (err) {
+      console.error('[HomePage] goto failed:', err.message);
+      throw err;
+    }
   }
 
   async verifyLoaded() {
@@ -52,7 +57,7 @@ class HomePage extends BasePage {
 
   async openSignIn() {
     console.log('[HomePage] Opening sign in');
-    await this.page.goto('/auth/login', { waitUntil: 'networkidle' });
+    await this.page.goto('/auth/login', { waitUntil: 'domcontentloaded', timeout: 60000 });
     console.log('[HomePage] Sign in page opened');
   }
 
@@ -85,10 +90,10 @@ class HomePage extends BasePage {
     console.log('[HomePage] First product card clicked');
   }
 
-  async openSecondProduct() {
+  async openTheProduct() {
     console.log('[HomePage] Clicking second product card');
-    await this.productCardItems.nth(2).waitFor({ state: 'visible' });
-    await this.productCardItems.nth(2).click();
+    await this.productCardItems.nth(4).waitFor({ state: 'visible' });
+    await this.productCardItems.nth(4).click();
     console.log('[HomePage] Second product card clicked');
   }
 

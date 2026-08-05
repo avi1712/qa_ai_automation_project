@@ -21,6 +21,10 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
     - name: Run Playwright tests
+      env:
+        # Remote Toolshop SUT — do NOT use localhost (no local app in CI)
+        BASE_URL: https://practicesoftwaretesting.com
+        UI_BASE_URL: https://practicesoftwaretesting.com
       run: npx playwright test
     - name: Generate Allure report
       if: ${{ !cancelled() }}

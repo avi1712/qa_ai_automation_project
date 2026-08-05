@@ -59,7 +59,10 @@ export default defineConfig({
       testDir: './tests/ui',
       timeout: 150000,
       use: {
-        baseURL: 'https://practicesoftwaretesting.com',
+        baseURL:
+          process.env.BASE_URL ||
+          process.env.UI_BASE_URL ||
+          'https://practicesoftwaretesting.com',
         ignoreHTTPSErrors: true,
         browserName: 'chromium',
         storageState: undefined,

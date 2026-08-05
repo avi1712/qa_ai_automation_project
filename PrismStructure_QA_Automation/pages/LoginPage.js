@@ -27,9 +27,14 @@ class LoginPage extends BasePage {
   /** Open base URL, maximize window, wait for page load. */
   async goto() {
     console.log('[LoginPage] Opening home page');
-    await this.maximize();
-    await super.goto('/');
-    console.log('[LoginPage] Home page loaded');
+    try {
+      await this.maximize();
+      await super.goto('/');
+      console.log('[LoginPage] Home page loaded');
+    } catch (err) {
+      console.error('[LoginPage] goto failed:', err.message);
+      throw err;
+    }
   }
 
   /**
@@ -50,10 +55,7 @@ class LoginPage extends BasePage {
     await this.login.waitFor({ state: 'visible' });
     await this.login.click();
     console.log('[LoginPage] Login button clicked');
-    // await this.page.waitForTimeout(5000);
-    // await this.myAccount.waitFor({ state: 'visible' });
-    // await expect(this.myAccount).toBeVisible();
-    // console.log('[LoginPage] Assert passed: My Account is visible');
+    await this.page.waitForTimeout(5000);
     await this.menu.waitFor({ state: 'visible' });
     await expect(this.menu).toBeVisible();
     console.log('[LoginPage] Assert passed: Menu is visible');

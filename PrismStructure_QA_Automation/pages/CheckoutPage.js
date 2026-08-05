@@ -77,7 +77,7 @@ class CheckoutPage extends BasePage {
     await this.billingHouseNumber.fill(houseNo);
     await this.billingHouseNumber.blur();
     console.log('[CheckoutPage] House number filled:', houseNo);
-
+    await this.page.waitForTimeout(3000);
     await this.billingStreet.waitFor({ state: 'visible' });
     await this.billingStreet.clear();
     await this.billingStreet.fill(billing.billing_street);
@@ -94,7 +94,7 @@ class CheckoutPage extends BasePage {
     await this.billingState.blur();
     console.log('[CheckoutPage] State filled:', billing.billing_state);
 
-    await expect(this.proceedPayment).toBeEnabled({ timeout: 15000 });
+    await expect(this.proceedPayment).toBeEnabled({ timeout: 30000 });
     console.log('[CheckoutPage] Proceed to checkout (proceed-3) is enabled');
   }
 

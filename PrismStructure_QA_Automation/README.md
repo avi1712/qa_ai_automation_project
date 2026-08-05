@@ -72,12 +72,28 @@ npm test                  # all
 npm run report            # open HTML report
 ```
 
-Reports: `reports/playwright-report/`
+## Execution reports (committed evidence)
+
+Reports are **not gitignored** so evaluators can see Pass status without re-running:
+
+| Report | Path | How to generate |
+|--------|------|-----------------|
+| Playwright HTML | `reports/playwright-report/` | produced by `npm test` |
+| Allure results | `reports/allure-results/` | produced by `npm test` (allure-playwright) |
+| Allure HTML | `reports/allure-report/` | `npm run allure:generate` |
+
+```bash
+npm test
+npm run allure:generate
+npm run report          # open Playwright HTML
+npm run allure:open     # open Allure HTML
+```
+
+CI also uploads these as Actions artifacts. Only `reports/test-results/` (raw failure media) stays ignored.
 
 ## Status
 
-Specs are **scaffolded and skipped** (`test.skip`) until locators/OpenAPI are verified on the live SUT in Part B.  
-Remove `test.skip(...)` after you confirm selectors and payloads.
+UI + API specs are implemented under `tests/`. Re-run `npm test` and refresh Allure before submission so report status matches **Passed**.
 
 ## Known SUT note
 

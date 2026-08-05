@@ -33,9 +33,14 @@ class RegisterPage extends BasePage {
 
   async goto() {
     console.log('[RegisterPage] Opening home page');
-    await this.maximize();
-    await super.goto('/');
-    console.log('[RegisterPage] Home page loaded');
+    try {
+      await this.maximize();
+      await super.goto('/');
+      console.log('[RegisterPage] Home page loaded');
+    } catch (err) {
+      console.error('[RegisterPage] goto failed:', err.message);
+      throw err;
+    }
   }
 
   /**
@@ -103,7 +108,7 @@ class RegisterPage extends BasePage {
   async navigateToRegisterationPage() {
     console.log('[RegisterPage] Navigating to registration page');
     // Direct URL — Sign in is hidden in collapsed nav on headless/small viewports
-    await this.page.goto('/auth/login', { waitUntil: 'networkidle' });
+    await this.page.goto('/auth/login', { waitUntil: 'domcontentloaded', timeout: 60000 });
 
     await this.registerYourAccount.waitFor({ state: 'visible' });
     await this.registerYourAccount.click();

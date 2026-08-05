@@ -50,7 +50,7 @@ test.describe('Add to cart and proceed to checkout', () => {
 
     // Step 2: Click the second product card
     console.log('[TC-UI-02] Step 2: Click second product');
-    await homePage.openSecondProduct();
+    await homePage.openTheProduct();
 
     // Step 3: Add to cart and verify toast message
     console.log('[TC-UI-02] Step 5: Verify toast message');

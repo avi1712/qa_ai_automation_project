@@ -69,9 +69,22 @@ Folder: `PrismStructure_QA_Automation`. Run: `npx playwright test --project=api`
 
 ---
 
+## Entry 6 — CI TimeoutError on page.goto networkidle
+
+**Prompt:**  
+GitHub Actions UI failures: `TimeoutError: page.goto: Timeout 60000ms exceeded` navigating to `https://practicesoftwaretesting.com/` waiting until `networkidle`. Suggested BASE_URL localhost:3000 / maximize guards.
+
+**AI Response Summary:**  
+Real cause was **not** missing base URL (CI already hit Toolshop). `waitUntil: 'networkidle'` never settles on this SUT in CI. Fixed `BasePage.goto` to `domcontentloaded`, guarded maximize, clearer logs; same for Register/Home login navigations. Workflow `BASE_URL` set to Toolshop (not localhost).
+
+**Debugging Outcome:**  
+localhost:3000 would have broken CI (no local app). networkidle → domcontentloaded is the correct fix.
+
+---
+
 ## Part B log (append after runs)
 
-_API suite green (2026-08-03). UI failures append below when encountered._
+_API suite green (2026-08-03). UI CI networkidle fix applied (2026-08-06)._
 
 <!--
 ### Failure entry template

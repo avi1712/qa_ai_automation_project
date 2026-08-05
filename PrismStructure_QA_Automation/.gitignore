@@ -1,19 +1,17 @@
 node_modules/
-reports/playwright-report/**
-!reports/playwright-report/.gitkeep
-reports/allure-results/**
-!reports/allure-results/.gitkeep
-reports/allure-report/**
-!reports/allure-report/.gitkeep
-reports/test-results/**
-!reports/test-results/.gitkeep
-test-results/
-playwright-report/
 .env
 *.log
 
-# Playwright
-/playwright-report/
+# Transient Playwright dumps (screenshots/videos/traces) — keep folder via .gitkeep
+reports/test-results/**
+!reports/test-results/.gitkeep
+test-results/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+
+# Execution reports ARE tracked (Allure + Playwright HTML + raw Allure results)
+# Do NOT ignore:
+#   reports/playwright-report/
+#   reports/allure-report/
+#   reports/allure-results/

@@ -1,0 +1,66 @@
+TestCaseID,Type,Title,MapsTo,Priority,Tags,TestType,Preconditions,TestSteps,TestData,ExpectedResult,ActualResult,Status,AutomationRef
+TC-M-01,Manual,Register login and verify profile,AC1,P0,@Smoke,Positive,"Browser open; unique email available; UI https://practicesoftwaretesting.com/","1. Open Toolshop home page
+2. Navigate to Sign in then Register
+3. Fill all required registration fields with valid unique data and submit
+4. Sign in with the same email and password
+5. Open My Account / Profile and verify displayed name and email","firstName=Avinash; lastName=Kumar; email=qa.test+{timestamp}@example.com; password=ValidPass@123; DOB and address filled","Registration succeeds; login succeeds; profile shows registered first name last name and email","Registration login and profile verified as expected",Passed,Manual only
+TC-M-02,Manual,Login fails with wrong password,AC1,P1,@Regression,Negative,"Registered or known customer account exists","1. Open Sign in page
+2. Enter a valid registered email
+3. Enter an incorrect password
+4. Submit login","email=customer@practicesoftwaretesting.com; password=DefinitelyWrong!NotValid99","Login is rejected; user remains unauthenticated; clear error message is shown; no access to protected account pages","Login rejected with error; no session created",Passed,Manual only
+TC-M-03,Manual,COD checkout generates invoice Confirm twice,AC2,P0,@Smoke,Positive,"Logged-in customer; product catalog available","1. Browse home and open a product
+2. Add product to cart
+3. Open cart and proceed to checkout
+4. Proceed to address step and fill billing address
+5. Proceed to payment and select Cash on Delivery
+6. Press Confirm once then Confirm again (required to generate invoice)
+7. Open My Invoices and verify the new invoice","payment_method=cash-on-delivery; billing_street/city/state/country/postal_code valid; Confirm x2","Order completes; invoice is generated after second Confirm; invoice appears under My Invoices","Invoice generated after Confirm x2 and visible under My Invoices",Passed,Manual only
+TC-M-04,Manual,Multi-item cart with quantity update,AC2,P1,@Regression,Positive,"Logged-in customer; at least two products available","1. Add first product to cart
+2. Return to home and add a second product to cart
+3. Open cart and increase quantity of one line item
+4. Verify cart line count and updated quantity before checkout","Two distinct products; quantity updated to 2 on one line","Cart shows multiple items; quantity reflects the update; totals recalculate accordingly","Multi-item cart and quantity update verified",Passed,Manual only
+TC-M-05,Manual,Register rejects invalid email format,AC1,P1,@Regression,Negative,"Registration page accessible","1. Open Register page
+2. Fill required fields using an invalid email format
+3. Attempt to submit registration","email=not-an-email; other fields valid","Registration is blocked or shows validation error; account is not created","Invalid email rejected with validation feedback",Passed,Manual only
+TC-M-06,Manual,Checkout blocks empty required billing fields,AC2,P1,@Regression,Negative,"Logged-in user with item in cart; on checkout address step","1. Add a product and proceed to checkout address step
+2. Leave required billing fields empty (street city postal code)
+3. Attempt to proceed to payment","Required billing fields blank","User cannot proceed; validation messages shown for required fields","Proceed blocked until required address fields are filled",Passed,Manual only
+TC-UI-01,UI Automation,Register then login to application,AC1,P0,@Smoke,Positive,"Playwright UI project configured; test-data/user.json present","1. Open home and navigate to registration
+2. Register with unique timestamped email and valid user details
+3. Login with the same credentials
+4. Assert navigation to authenticated home/account state","email=qa.test+{timestamp}@example.com; password from user.json","User is registered and logged in successfully","Automation passed — register and login succeeded",Passed,tests/ui/homePageTest/homePage.spec.js
+TC-UI-02,UI Automation,Browse add to cart COD checkout Confirm twice,AC2,P0,@Regression,Positive,"Playwright UI project; billing.json and user.json available","1. Register and login with unique email
+2. Open second product from home and add to cart (toast verified)
+3. Open cart and proceed to checkout
+4. Fill billing address and proceed to payment
+5. Select cash-on-delivery then Confirm twice
+6. Assert payment/invoice success toast or message","payment_method=cash-on-delivery; billing from billing.json; Confirm x2","COD payment completes; invoice success message shown after second Confirm","Automation passed — COD checkout and invoice flow completed",Passed,tests/ui/homePageTest/addToCartAndPayment.spec.js
+TC-UI-03,UI Automation,Price range filter validates product prices,AC2,P1,@Regression,Positive,"Home page product grid and price slider available","1. Open home and verify loaded
+2. Set price range 1–100 and assert all visible prices <= 100
+3. Reload home and set price range 100–200
+4. Assert all visible prices >= 100","min/max slider ranges 1-100 and 100-200","Visible product prices respect the selected range bounds","Automation passed — price filter assertions held",Passed,tests/ui/homePageTest/homePage.spec.js
+TC-UI-04,UI Automation,Search hammer shows matching products,AC2,P1,@Smoke,Positive,"Home page search control available","1. Open home and verify loaded
+2. Search for hammer
+3. Assert visible product names contain hammer","searchQuery=hammer","Search results show products whose names contain hammer","Automation passed — hammer search results correct",Passed,tests/ui/homePageTest/homePage.spec.js
+TC-UI-05,UI Automation,Hammer category filter shows hammers,AC2,P1,@Smoke,Positive,"Home page category filters available","1. Open home and verify loaded
+2. Apply Hammer category filter
+3. Assert visible products are hammers","category=Hammer","Only hammer products are listed after category filter","Automation passed — category filter correct",Passed,tests/ui/homePageTest/homePage.spec.js
+TC-UI-06,UI Automation,Eco-friendly filter shows eco badge products,AC2,P2,@Smoke,Positive,"Home page eco-friendly filter available","1. Open home and verify loaded
+2. Enable eco-friendly filter only
+3. Assert visible products show eco badge","filter=eco-friendly","Filtered products display eco-friendly badge","Automation passed — eco filter and badges verified",Passed,tests/ui/homePageTest/homePage.spec.js
+TC-API-01,API Automation,Register login and create cart,AC1,P0,@Smoke,Positive,"API base https://api.practicesoftwaretesting.com; unique user payload","1. POST /users/register with unique user
+2. POST /users/login with same credentials and capture Bearer token
+3. POST /carts with Authorization Bearer token","Unique email/password via payloadBuilder","Register returns 201; login returns 200 with access token; cart create returns 201 with cart id","Automation passed — auth and cart creation succeeded",Passed,tests/api/api.spec.js
+TC-API-02,API Automation,Products cart verify and COD invoice,AC2,P0,@Regression,Positive,"Valid Bearer token flow from register/login","1. Register and login to obtain Bearer token
+2. GET /products and select first product id
+3. POST /carts then POST /carts/{id} to add product quantity 1
+4. GET /carts/{id} and verify cart_items
+5. POST /invoices with cash-on-delivery billing payload and cart_id","payment_method=cash-on-delivery; billing fields from payloadBuilder; cart_id from create cart","Products 200; add-to-cart 200; cart has item; invoice 201 with invoice_number","Automation passed — COD invoice created with invoice_number",Passed,tests/api/api.spec.js
+TC-API-03,API Automation,Get products list is available,AC2,P1,@Smoke,Positive,"API reachable without auth for product list","1. GET /products
+2. Assert response status and non-empty data array","None (public list)","Status 200; data is a non-empty array of products","Automation passed — product list returned",Passed,tests/api/api.spec.js
+TC-API-04,API Automation,Login with wrong password fails,AC1,P1,@Regression,Negative,"Known customer email exists","1. POST /users/login with valid email and wrong password
+2. Assert non-success status and no access token","email=customer@practicesoftwaretesting.com; password=DefinitelyWrong!NotValid99","Status 401/422/423; no Bearer token issued","Automation passed — invalid login rejected",Passed,tests/api/api.spec.js
+TC-API-05,API Automation,Invoice without bearer token returns 401,AC2,P0,@Regression,Negative,"Invoice endpoint requires authentication","1. POST /invoices with COD payload and empty/missing Authorization header
+2. Assert unauthorized response","cart_id=invalid-cart-id-for-negative; payment_method=cash-on-delivery; no Bearer token","Status 401 Unauthorized; invoice is not created","Automation passed — unauthenticated invoice rejected with 401",Passed,tests/api/api.spec.js
+TC-API-06,API Automation,Search products by query hammer,AC2,P1,@Smoke,Positive,"Product search endpoint available","1. GET /products/search?q=hammer
+2. Assert status 200 and results contain hammer in name","q=hammer","Status 200; data array non-empty; first product name contains hammer","Automation passed — search results match query",Passed,tests/api/api.spec.js

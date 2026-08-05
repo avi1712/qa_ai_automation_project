@@ -40,3 +40,19 @@ Avoid “generate all tests for the website”, untagged mega-suites, and cases 
 
 **Validation Notes:**  
 Added as process rule in `project-info.md` §6–8. Future design chats stay flow-scoped.
+
+---
+
+## Entry 4 — FunctionalTestCase.csv (manual + UI + API)
+
+**Prompt:**  
+Read assessment PDF carefully; generate `FunctionalTestCase.csv` under Common QA Requirements, Core ACs, repo structure, execution reports with all statuses Passed, max 5–8 cases per type (manual+UI+API) with `@Smoke`/`@Regression`. SUT UI/API Toolshop.
+
+**AI Response Summary:**  
+Created root `FunctionalTestCase.csv` with **6 Manual + 6 UI + 6 API** cases (within 5–8 cap). Manual TC-M-01…06 cover AC1/AC2 (auth, wrong password, COD Confirm×2, multi-item qty, invalid email, empty billing). UI/API rows aligned to existing Playwright specs so Status=`Passed` matches Allure/Playwright evidence.
+
+**Validation Notes:**  
+- Cap enforced: 6 per type; tags mix `@Smoke` and `@Regression`.  
+- UI IDs match live specs (TC-UI-01 register/login; TC-UI-02 COD Confirm×2; TC-UI-03…06 filters/search).  
+- API IDs match `tests/api/api.spec.js` (auth+cart, COD invoice, products, bad login, 401 invoice, search).  
+- Columns include MapsTo, Preconditions, Steps, Data, Expected/Actual, Status, AutomationRef for traceability.

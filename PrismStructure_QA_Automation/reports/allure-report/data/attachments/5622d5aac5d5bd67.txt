@@ -1,0 +1,10 @@
+[TC-UI-05] Open home and filter Hammer category
+[HomePage] Opening home page
+[BasePage] Navigating to https://practicesoftwaretesting.com/ (waitUntil=domcontentloaded)
+[BasePage] Navigation OK: https://practicesoftwaretesting.com/
+[HomePage] Home page loaded
+[HomePage] Home page verified — search and products visible
+[HomePage] Filtering by Hammer category
+[HomePage] Hammer category applied
+[HomePage] All 7 products contain "hammer"
+[TC-UI-05] Passed
