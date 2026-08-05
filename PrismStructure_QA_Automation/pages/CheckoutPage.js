@@ -116,11 +116,7 @@ class CheckoutPage extends BasePage {
     await this.confirmBtn.click();
    console.log('[CheckoutPage] Confirm clicked ');
     await this.verifyPaymentSuccessToast();
-    // await this.page.waitForTimeout(4000);
-    // await this.confirmBtn.waitFor({ state: 'visible' });
-    // await this.confirmBtn.click();
-    // console.log('[CheckoutPage] Confirm clicked (2nd)');
-    //await this.verifyOrderConfirmationMessage();
+ 
   }
 
   async verifyPaymentSuccessToast() {
@@ -131,13 +127,6 @@ class CheckoutPage extends BasePage {
     console.log('[CheckoutPage] Payment toast verified:', text?.trim());
   }
 
-  // /** After 2nd Confirm — validate invoice confirmation text. */
-  // async verifyOrderConfirmationMessage() {
-  //   await this.invoiceConfirmation.waitFor({ state: 'visible' });
-  //   await expect(this.invoiceConfirmation).toContainText('Thanks for your order! Your invoice number is');
-  //   const text = await this.invoiceConfirmation.textContent();
-  //   console.log('[CheckoutPage] Order confirmation verified:', text?.trim());
-  // }
 }
 
 module.exports = { CheckoutPage };

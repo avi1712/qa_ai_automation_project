@@ -1,11 +1,12 @@
 const { test, expect } = require('@playwright/test');
 const { LoginPage } = require('../../../pages/LoginPage');
 const { RegisterPage } = require('../../../pages/RegisterPage');
+const { HomePage } = require('../../../pages/HomePage');
 const userData = require('../../../test-data/user.json');
 
 
 test.describe('Register to the application', () => {
-  test('TC-UI-01 register to the application @Smoke', async ({ page }) => {
+  test('TC-UI-01 register to the application @Smoke',{ tag: '@Smoke' }, async ({ page }) => {
     console.log('[TC-UI-01] Test started: Register then Login');
 
     const registerPage = new RegisterPage(page);
@@ -39,4 +40,67 @@ test.describe('Register to the application', () => {
   });
 
   
+});
+
+test.describe('Home page filters and search', () => {
+  test('TC-UI-03 price range 1-100 and 100-200 validates product prices', { tag: '@Regression' }, async ({ page }) => {
+    test.setTimeout(120000);
+    const homePage = new HomePage(page);
+
+    console.log('[TC-UI-03] Open home page');
+    await homePage.goto();
+    await homePage.verifyLoaded();
+
+    // Range 1 – 100 → no product price more than 100
+    console.log('[TC-UI-03] Set price slider 1 to 100 — expect prices <= 100');
+    await homePage.setPriceRangeBetween(1, 100);
+    await homePage.verifyAllVisiblePricesAtMost(100);
+
+    // Range 100 – 200 → no product price less than 100
+    console.log('[TC-UI-03] Set price slider 100 to 200 — expect prices >= 100');
+    await homePage.goto();
+    await homePage.verifyLoaded();
+    await homePage.setPriceRangeBetween(100, 200);
+    await homePage.verifyAllVisiblePricesAtLeast(100);
+
+    console.log('[TC-UI-03] Passed');
+  });
+
+  test('TC-UI-04 search hammer shows hammer products', { tag: '@Smoke' }, async ({ page }) => {
+    test.setTimeout(60000);
+    const homePage = new HomePage(page);
+
+    console.log('[TC-UI-04] Open home and search hammer');
+    await homePage.goto();
+    await homePage.verifyLoaded();
+    await homePage.searchAndVerifyProductNamesContain('hammer');
+
+    console.log('[TC-UI-04] Passed');
+  });
+
+  test('TC-UI-05 filter by Hammer category shows hammers', { tag: '@Smoke' }, async ({ page }) => {
+    test.setTimeout(60000);
+    const homePage = new HomePage(page);
+
+    console.log('[TC-UI-05] Open home and filter Hammer category');
+    await homePage.goto();
+    await homePage.verifyLoaded();
+    await homePage.filterByHammerCategory();
+    await homePage.verifyVisibleProductsAreHammers();
+
+    console.log('[TC-UI-05] Passed');
+  });
+
+  test('TC-UI-06 eco-friendly filter shows products with eco badge', { tag: '@Smoke' }, async ({ page }) => {
+    test.setTimeout(60000);
+    const homePage = new HomePage(page);
+
+    console.log('[TC-UI-06] Open home and enable eco-friendly filter');
+    await homePage.goto();
+    await homePage.verifyLoaded();
+    await homePage.filterEcoFriendlyOnly();
+    await homePage.verifyVisibleProductsHaveEcoBadge();
+
+    console.log('[TC-UI-06] Passed');
+  });
 });
