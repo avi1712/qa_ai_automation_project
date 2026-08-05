@@ -12,7 +12,6 @@ const billingData = require('../../../test-data/billing.json');
 test.describe('Add to cart and proceed to checkout', () => {
 
   test('TC-UI-02 browse second product, add to cart and proceed to checkout and pay with COD', { tag: '@Regression' }, async ({ page }) => {
-    test.setTimeout(120000);
     console.log(' Test started: Register then Login');
 
     const registerPage = new RegisterPage(page);

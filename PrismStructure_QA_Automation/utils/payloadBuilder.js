@@ -1,4 +1,4 @@
-const billing = require('../test-data/billing.json');
+const billingApi = require('../test-data/billing-api.json');
 
 /**
  * Payload builders for Toolshop API (register user + COD invoice).
@@ -48,7 +48,7 @@ function toRegisterPayload(user) {
  */
 function buildCodInvoicePayload(cartId, overrides = {}) {
   return {
-    ...billing,
+    ...billingApi,
     cart_id: cartId,
     payment_method: 'cash-on-delivery',
     payment_details: {},

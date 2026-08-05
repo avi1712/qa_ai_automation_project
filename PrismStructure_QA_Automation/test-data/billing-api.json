@@ -1,0 +1,10 @@
+{
+  "billing_street": "Zoey Shore",
+  "billing_city": "Hesselbury",
+  "billing_state": "Florida",
+  "billing_country": "TG",
+  "billing_postal_code": "1234AA",
+  "billing_house_number": "A42",
+  "payment_method": "cash-on-delivery",
+  "payment_details": {}
+}

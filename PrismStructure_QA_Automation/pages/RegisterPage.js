@@ -102,9 +102,8 @@ class RegisterPage extends BasePage {
 
   async navigateToRegisterationPage() {
     console.log('[RegisterPage] Navigating to registration page');
-    await this.signinBtn.waitFor({ state: 'visible' });
-    await this.signinBtn.click();
-    console.log('[RegisterPage] Sign in clicked');
+    // Direct URL — Sign in is hidden in collapsed nav on headless/small viewports
+    await this.page.goto('/auth/login', { waitUntil: 'networkidle' });
 
     await this.registerYourAccount.waitFor({ state: 'visible' });
     await this.registerYourAccount.click();

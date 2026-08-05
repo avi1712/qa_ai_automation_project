@@ -54,6 +54,7 @@ class CheckoutPage extends BasePage {
     console.log('[CheckoutPage] Filling billing address');
 
     const countryLabels = {
+      IN: 'India',
       TG: 'Togo',
       NL: 'Netherlands (the)',
       US: 'United States of America (the)',

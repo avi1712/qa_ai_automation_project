@@ -1,6 +1,10 @@
 /**
  * BasePage — shared superclass for all UI Page Objects (POM)
  */
+
+/** Match playwright.config.js DESKTOP_VIEWPORT — full screen in headless + headed */
+const DESKTOP_VIEWPORT = { width: 1920, height: 1080 };
+
 class BasePage {
   /** @param {import('@playwright/test').Page} page */
   constructor(page) {
@@ -21,14 +25,38 @@ class BasePage {
     await this.page.waitForLoadState('load');
   }
 
-  /** Maximize the browser window (requires viewport: null + --start-maximized). */
+  /**
+   * Ensure full desktop layout — setViewportSize works in headless; CDP maximize helps headed runs.
+   */
   async maximize() {
-    const session = await this.page.context().newCDPSession(this.page);
-    const { windowId } = await session.send('Browser.getWindowForTarget');
-    await session.send('Browser.setWindowBounds', {
-      windowId,
-      bounds: { windowState: 'maximized' },
-    });
+    await this.page.setViewportSize(DESKTOP_VIEWPORT);
+
+    try {
+      const session = await this.page.context().newCDPSession(this.page);
+      const { windowId } = await session.send('Browser.getWindowForTarget');
+      await session.send('Browser.setWindowBounds', {
+        windowId,
+        bounds: { windowState: 'maximized' },
+      });
+    } catch {
+      // Headless has no real window — viewport size above is sufficient
+    }
+  }
+
+  /**
+   * Open Sign in from navbar — expands mobile menu when link is collapsed (headless/small viewport).
+   */
+  async openSignInFromNav() {
+    const signIn = this.locator('[data-test="nav-sign-in"]');
+    const menu = this.locator('[data-test="nav-menu"]');
+
+    if (!(await signIn.isVisible())) {
+      await menu.waitFor({ state: 'visible' });
+      await menu.click();
+    }
+
+    await signIn.waitFor({ state: 'visible' });
+    await signIn.click();
   }
 
   /** @param {string} selector */

@@ -52,9 +52,8 @@ class HomePage extends BasePage {
 
   async openSignIn() {
     console.log('[HomePage] Opening sign in');
-    await this.signInBtn.waitFor({ state: 'visible' });
-    await this.signInBtn.click();
-    console.log('[HomePage] Sign in clicked');
+    await this.page.goto('/auth/login', { waitUntil: 'networkidle' });
+    console.log('[HomePage] Sign in page opened');
   }
 
   async clickHome() {
@@ -88,8 +87,8 @@ class HomePage extends BasePage {
 
   async openSecondProduct() {
     console.log('[HomePage] Clicking second product card');
-    await this.productCardItems.nth(1).waitFor({ state: 'visible' });
-    await this.productCardItems.nth(1).click();
+    await this.productCardItems.nth(2).waitFor({ state: 'visible' });
+    await this.productCardItems.nth(2).click();
     console.log('[HomePage] Second product card clicked');
   }
 

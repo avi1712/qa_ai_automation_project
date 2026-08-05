@@ -44,7 +44,6 @@ test.describe('Register to the application', () => {
 
 test.describe('Home page filters and search', () => {
   test('TC-UI-03 price range 1-100 and 100-200 validates product prices', { tag: '@Regression' }, async ({ page }) => {
-    test.setTimeout(120000);
     const homePage = new HomePage(page);
 
     console.log('[TC-UI-03] Open home page');
@@ -67,7 +66,6 @@ test.describe('Home page filters and search', () => {
   });
 
   test('TC-UI-04 search hammer shows hammer products', { tag: '@Smoke' }, async ({ page }) => {
-    test.setTimeout(60000);
     const homePage = new HomePage(page);
 
     console.log('[TC-UI-04] Open home and search hammer');
@@ -79,7 +77,6 @@ test.describe('Home page filters and search', () => {
   });
 
   test('TC-UI-05 filter by Hammer category shows hammers', { tag: '@Smoke' }, async ({ page }) => {
-    test.setTimeout(60000);
     const homePage = new HomePage(page);
 
     console.log('[TC-UI-05] Open home and filter Hammer category');
@@ -92,7 +89,6 @@ test.describe('Home page filters and search', () => {
   });
 
   test('TC-UI-06 eco-friendly filter shows products with eco badge', { tag: '@Smoke' }, async ({ page }) => {
-    test.setTimeout(60000);
     const homePage = new HomePage(page);
 
     console.log('[TC-UI-06] Open home and enable eco-friendly filter');
