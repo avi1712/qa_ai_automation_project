@@ -3,12 +3,75 @@
 AI-assisted QA mini project for Practice Software Testing (Toolshop).  
 Playwright (Prism-style) UI + API automation lives at the **repository root**.
 
+## Project information
+
+| Item | Detail |
+|------|--------|
+| **Framework** | [Playwright](https://playwright.dev/) (`@playwright/test` v1.54+) with **Prism-style** layout (page objects, API helpers, fixtures) |
+| **Reporting** | Playwright HTML reporter + [Allure](https://allurereport.org/) (`allure-playwright`) |
+| **Language** | JavaScript (Node.js) |
+| **Application under test** | Practice Software Testing — **Toolshop** |
+| **UI URL** | https://practicesoftwaretesting.com/ |
+| **API URL** | https://api.practicesoftwaretesting.com |
+| **API docs** | https://api.practicesoftwaretesting.com/api/documentation |
+| **Manual test cases** | `FunctionalTestCase.csv` (6 manual + 6 UI + 6 API rows) |
+| **Workflow / AI context** | `project-info.md`, `requirements-risk-analysis.md`, `ai-prompts/` |
+
+### Prerequisites
+
+| Requirement | Notes |
+|-------------|--------|
+| **Node.js** | LTS recommended (v18+ or v20+) |
+| **npm** | Comes with Node.js |
+| **Network** | Public demo SUT — no local app or VPN required |
+| **Browser** | Chromium (installed via Playwright CLI below) |
+| **Secrets / `.env`** | **Not required** — URLs default in `playwright.config.js`; users are generated at runtime |
+
+Optional environment variables (only if you need to override defaults):
+
+| Variable | Purpose | Default |
+|----------|---------|---------|
+| `BASE_URL` or `UI_BASE_URL` | UI test base URL | `https://practicesoftwaretesting.com` |
+
+No API keys or bearer tokens are stored in the repo. API tests register a new user per run.
+
+### Test data
+
+| Location | Used for | Contents |
+|----------|----------|----------|
+| `test-data/user.json` | UI registration defaults | Name, address, phone, password pattern (`email` left empty — filled at runtime) |
+| `test-data/billing.json` | UI checkout billing address | COD billing fields for checkout flow |
+| `test-data/billing-api.json` | API COD invoice payload | Billing fields for `POST` invoice (no `cart_id` — added dynamically) |
+| `utils/payloadBuilder.js` | API + fixtures | `buildUniqueUser()`, `toRegisterPayload()`, `buildCodInvoicePayload()` — timestamped `qa.api+{stamp}@example.com` |
+| `fixtures/testFixtures.js` | UI specs | Injects page objects + `uniqueUser` per test |
+
+**Manual tests:** step-level data is in the `TestData` column of `FunctionalTestCase.csv` (e.g. `qa.test+{timestamp}@example.com`). Replace `{timestamp}` when executing by hand.
+
+### Automation layout
+
+| Path | Purpose |
+|------|---------|
+| `tests/ui/` | UI specs (`@Smoke` / `@Regression` tags) |
+| `tests/api/api.spec.js` | API specs (6 cases) |
+| `pages/` | UI page objects (Login, Register, Cart, Checkout, etc.) |
+| `api/` | API helpers (`authApi.js`, `cartApi.js`, …) |
+| `fixtures/testFixtures.js` | Extended Playwright `test` with POM fixtures |
+| `utils/` | Payload builders and shared helpers |
+| `playwright.config.js` | Projects: **UI Tests** (Chromium) and **Api Tests** (HTTP) |
+
+### Known SUT behaviour
+
+- **Payment (Core):** Cash on Delivery (`cash-on-delivery`)
+- **UI invoice:** press **Confirm twice** on the payment step
+
+---
+
 ## Repository layout
 
 ```text
 qa-ai-practical-assessment/
-├── FunctionalTestCase.csv
-├── project-info.md
+├── FunctionalTestCase.csv    # Manual + UI + API case definitions (CSV)
+├── project-info.md           # Part A AI workflow foundation
 ├── requirements-risk-analysis.md
 ├── README.md
 ├── ai-prompts/
@@ -19,7 +82,7 @@ qa-ai-practical-assessment/
 ├── tests/                    # UI + API specs
 ├── fixtures/
 ├── utils/
-├── test-data/
+├── test-data/                # Static JSON test data
 ├── reports/                  # Playwright + Allure working output
 ├── execution-report/         # Static Allure HTML (submission evidence)
 └── .agents/skills/           # Caveman + related Cursor skills
@@ -31,6 +94,129 @@ qa-ai-practical-assessment/
 npm install
 npx playwright install chromium
 ```
+
+## Run automation
+
+All commands run from the **repository root**.
+
+### Full suite
+
+| Command | What runs |
+|---------|-----------|
+| `npm test` | All UI + API tests (headless UI) |
+| `npm run test:headed` | All tests, UI in headed Chromium |
+| `npm run report` | Open last Playwright HTML report |
+
+### Smoke (`@Smoke`)
+
+| Command | What runs |
+|---------|-----------|
+| `npm run test:smoke` | All `@Smoke` tests (UI + API) |
+| `npx playwright test tests/ui --grep @Smoke` | UI smoke only |
+| `npm run test:api:smoke` | API smoke only |
+
+### Regression (`@Regression`)
+
+| Command | What runs |
+|---------|-----------|
+| `npm run test:regression` | All `@Regression` tests (UI + API) |
+| `npx playwright test tests/ui --grep @Regression` | UI regression only |
+| `npm run test:api:regression` | API regression only |
+
+### By layer
+
+| Command | What runs |
+|---------|-----------|
+| `npm run test:ui` | All UI specs (headed Chromium) |
+| `npm run test:api` | All API specs (`api.spec.js`, Api Tests project) |
+| `npm run test:home` | `homePage.spec.js` only (headed) |
+| `npm run codegen` | Playwright recorder against Toolshop UI |
+
+### Direct Playwright examples
+
+```bash
+# Single spec
+npx playwright test tests/ui/homePageTest/homePage.spec.js --project="UI Tests"
+
+# API project only
+npx playwright test --project="Api Tests"
+
+# Headed UI smoke
+npx playwright test tests/ui --grep @Smoke --headed --project="UI Tests"
+```
+
+### Run manual test cases
+
+Manual cases are **not** executed by npm. Use `FunctionalTestCase.csv`:
+
+1. Open https://practicesoftwaretesting.com/ in a browser.
+2. Find rows with `Type=Manual` (TC-M-01 … TC-M-06).
+3. Follow `TestSteps`; use `TestData` (unique email per run).
+4. Record results in `ActualResult` / `Status` if you maintain the CSV locally.
+
+UI and API rows in the same CSV map to automated specs via the `AutomationRef` column.
+
+---
+
+## Reports — where output is generated
+
+Running `npm test` (or any `playwright test` command) produces artifacts as follows:
+
+| Report / artifact | Path | When created | Committed? |
+|-------------------|------|--------------|------------|
+| **Playwright HTML (final working)** | `reports/playwright-report/` (`index.html`) | Every test run | Yes (after run) |
+| **Allure raw results** | `reports/allure-results/` | Every test run | No (gitignored) |
+| **Allure HTML (working)** | `reports/allure-report/` | After `npm run allure:generate` | Yes |
+| **Static Allure (submission)** | `execution-report/` (`index.html`) | After `npm run allure:execution-report` | Yes |
+| **Traces / screenshots / video** | `reports/test-results/` | On failure / retry (UI) | No (gitignored) |
+
+### Generate Allure HTML (after tests finish)
+
+`npm test` writes raw Allure data to `reports/allure-results/`. **Generate HTML only after a test run:**
+
+```bash
+# 1) Run tests (creates reports/allure-results)
+npm test
+
+# 2) Working Allure HTML → reports/allure-report/
+npm run allure:generate
+
+# 3) Static submission copy → execution-report/
+npm run allure:execution-report
+
+# Optional: generate both + open working report in browser
+npm run allure:report
+```
+
+| Command | What it does |
+|---------|----------------|
+| `npm run allure:generate` | Builds Allure HTML → `reports/allure-report/` |
+| `npm run allure:execution-report` | Builds static Allure → `execution-report/` (includes `index.html`) |
+| `npm run allure:open` | Opens `reports/allure-report` in the browser |
+| `npm run allure:open:execution` | Opens `execution-report` in the browser |
+| `npm run allure:clean` | Clears Allure results/report folders |
+| `npm run allure:report` | `allure:generate` + `allure:execution-report` + `allure:open` |
+
+**Typical end-to-end flow:**
+
+```bash
+npm test
+npm run allure:generate
+npm run allure:execution-report
+```
+
+**Primary report to open for reviewers:** `execution-report/index.html`
+
+Ways to open:
+
+1. **File Explorer** — double-click `execution-report/index.html`
+2. **IDE** — right-click `execution-report/index.html` → Open in Browser
+3. **CLI** — `npm run allure:open:execution`
+4. **Windows file URL example:**  
+   `file:///D:/Assignment/qa-ai-practical-assessment/execution-report/index.html`  
+   (adjust drive/path to your clone)
+
+---
 
 ## Use Caveman (Cursor AI)
 
@@ -46,84 +232,3 @@ This repo ships the [caveman](https://github.com/JuliusBrussee/caveman) skills u
 5. Quick reference — **`/caveman-help`**, or read `.agents/skills/caveman/README.md`.
 
 Related skills (same folder): `caveman-commit` (commit messages), `caveman-review` (PR comments), `caveman-compress` (compress memory `.md` files), `caveman-stats` (session token usage).
-
-## Run
-
-```bash
-npm run test:smoke        # @Smoke only
-npm run test:regression   # @Regression only
-npm run test:ui           # UI specs
-npm run test:api          # API specs
-npm test                  # all (UI + API)
-npm run report            # open Playwright HTML report
-```
-
-## After running tests — generate Allure reports
-
-`npm test` writes raw Allure results to `reports/allure-results/`.  
-**After the tests finish**, generate the HTML reports:
-
-```bash
-# 1) Run tests (creates reports/allure-results)
-npm test
-
-# 2) Generate Allure HTML into reports/allure-report
-npm run allure:generate
-
-# 3) Generate static Allure into execution-report/ (submission folder)
-npm run allure:execution-report
-
-# Optional: generate both working + execution-report, then open working report
-npm run allure:report
-```
-
-| Command | What it does |
-|---------|----------------|
-| `npm run allure:generate` | Builds Allure HTML → `reports/allure-report/` |
-| `npm run allure:execution-report` | Builds static Allure → `execution-report/` (includes `index.html`) |
-| `npm run allure:open` | Opens `reports/allure-report` in the browser |
-| `npm run allure:open:execution` | Opens `execution-report` in the browser |
-| `npm run allure:clean` | Clears Allure results/report folders |
-| `npm run allure:report` | `allure:generate` + `allure:execution-report` + `allure:open` |
-
-Typical flow:
-
-```bash
-npm test
-npm run allure:generate
-npm run allure:execution-report
-```
-
-Then open **`execution-report/index.html`** in a browser to view the execution report.
-
-## Execution reports (committed evidence)
-
-| Report | Path | How to generate |
-|--------|------|-----------------|
-| **Static Allure (submission)** | `execution-report/` | `npm run allure:execution-report` |
-| Playwright HTML | `reports/playwright-report/` | produced by `npm test` |
-| Allure results | `reports/allure-results/` | produced by `npm test` (**gitignored**) |
-| Allure HTML (working) | `reports/allure-report/` | `npm run allure:generate` |
-
-### View the execution report in a browser
-
-Open the static Allure report file:
-
-**`execution-report/index.html`**
-
-Ways to open it:
-
-1. **File Explorer** — go to the `execution-report` folder and double-click `index.html`
-2. **From the IDE** — right-click `execution-report/index.html` → Open with Live Server / Open in Browser
-3. **CLI (Allure server)** — `npm run allure:open:execution`
-4. **Windows path example** — paste into the browser address bar:  
-   `file:///D:/Assignment/qa-ai-practical-assessment/execution-report/index.html`  
-   (adjust the drive/path to your clone)
-
-This page shows pass/fail status, suites, and test details for the last generated run.
-
-Only `reports/test-results/` and `reports/allure-results/` stay gitignored (raw run artifacts).
-
-## Known SUT note
-
-UI invoice generation: press **Confirm twice**.
