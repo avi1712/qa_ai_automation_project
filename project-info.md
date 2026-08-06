@@ -15,7 +15,7 @@ This document is the Part A foundation. Part B (manual CSV, Playwright UI + API 
 | **UI** | https://practicesoftwaretesting.com/ |
 | **API** | https://api.practicesoftwaretesting.com (OpenAPI: `/api/documentation`) |
 | **Assessment Start Date** | 2026-07-30 |
-| **Submission Date** | 2026-08-06 |
+| **Submission Date** | 2026-08-07 |
 | **Public repository** | https://github.com/avi1712/qa_ai_automation_project |
 
 ---
