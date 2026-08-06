@@ -22,7 +22,7 @@ qa-ai-practical-assessment/
 ├── test-data/
 ├── reports/                  # Playwright + Allure working output
 ├── execution-report/         # Static Allure HTML (submission evidence)
-└── .github/workflows/
+└── .agents/skills/           # Caveman + related Cursor skills
 ```
 
 ## Setup
