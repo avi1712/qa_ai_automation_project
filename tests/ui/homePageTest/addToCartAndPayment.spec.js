@@ -12,7 +12,7 @@ const billingData = require('../../../test-data/billing.json');
 
 test.describe('Add to cart and proceed to checkout', () => {
 
-  test('TC-UI-02 browse add to cart COD checkout Confirm twice and verify invoice', { tag: '@Regression' }, async ({ page }) => {
+  test('TC-UI-02 browse add to cart COD checkout Confirm twice and verify invoice', { tag: '@Smoke' }, async ({ page }) => {
     console.log('[TC-UI-02] Test started: COD checkout, Confirm x2, My Invoices');
 
     const registerPage = new RegisterPage(page);

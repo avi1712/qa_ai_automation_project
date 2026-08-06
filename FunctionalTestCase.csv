@@ -30,7 +30,7 @@ TC-UI-01,UI Automation,Register login and verify profile,AC1,P0,@Smoke,Positive,
 3. Login with the same credentials
 4. Open My Profile from nav menu
 5. Assert profile shows registered first name, last name, and email","email=qa.test+{timestamp}@example.com; password from user.json; firstName/lastName from user.json","User is registered and logged in; profile displays registered first name, last name, and email","Automation passed — register, login, and profile details verified",Passed,tests/ui/homePageTest/homePage.spec.js
-TC-UI-02,UI Automation,Browse add to cart COD checkout Confirm twice verify invoice,AC2,P0,@Regression,Positive,"Playwright UI project; billing.json and user.json available","1. Register and login with unique email
+TC-UI-02,UI Automation,Browse add to cart COD checkout Confirm twice verify invoice,AC2,P0,@Smoke,Positive,"Playwright UI project; billing.json and user.json available","1. Register and login with unique email
 2. Open second product from home and add to cart (toast verified)
 3. Open cart and proceed to checkout
 4. Fill billing address and proceed to payment
@@ -47,13 +47,13 @@ TC-UI-04,UI Automation,Search hammer shows matching products,AC2,P1,@Smoke,Posit
 TC-UI-05,UI Automation,Hammer category filter shows hammers,AC2,P1,@Smoke,Positive,"Home page category filters available","1. Open home and verify loaded
 2. Apply Hammer category filter
 3. Assert visible products are hammers","category=Hammer","Only hammer products are listed after category filter","Automation passed — category filter correct",Passed,tests/ui/homePageTest/homePage.spec.js
-TC-UI-06,UI Automation,Eco-friendly filter shows eco badge products,AC2,P2,@Smoke,Positive,"Home page eco-friendly filter available","1. Open home and verify loaded
+TC-UI-06,UI Automation,Eco-friendly filter shows eco badge products,AC2,P2,@Regression,Positive,"Home page eco-friendly filter available","1. Open home and verify loaded
 2. Enable eco-friendly filter only
 3. Assert visible products show eco badge","filter=eco-friendly","Filtered products display eco-friendly badge","Automation passed — eco filter and badges verified",Passed,tests/ui/homePageTest/homePage.spec.js
 TC-API-01,API Automation,Register login and create cart,AC1,P0,@Smoke,Positive,"API base https://api.practicesoftwaretesting.com; unique user payload","1. POST /users/register with unique user
 2. POST /users/login with same credentials and capture Bearer token
 3. POST /carts with Authorization Bearer token","Unique email/password via payloadBuilder","Register returns 201; login returns 200 with access token; cart create returns 201 with cart id","Automation passed — auth and cart creation succeeded",Passed,tests/api/api.spec.js
-TC-API-02,API Automation,Products cart verify and COD invoice,AC2,P0,@Regression,Positive,"Valid Bearer token flow from register/login","1. Register and login to obtain Bearer token
+TC-API-02,API Automation,Products cart verify and COD invoice,AC2,P0,@Smoke,Positive,"Valid Bearer token flow from register/login","1. Register and login to obtain Bearer token
 2. GET /products and select first product id
 3. POST /carts then POST /carts/{id} to add product quantity 1
 4. GET /carts/{id} and verify cart_items

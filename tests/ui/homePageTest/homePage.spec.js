@@ -98,7 +98,7 @@ test.describe('Home page filters and search', () => {
     console.log('[TC-UI-05] Passed');
   });
 
-  test('TC-UI-06 eco-friendly filter shows products with eco badge', { tag: '@Smoke' }, async ({ page }) => {
+  test('TC-UI-06 eco-friendly filter shows products with eco badge', { tag: '@Regression' }, async ({ page }) => {
     const homePage = new HomePage(page);
 
     console.log('[TC-UI-06] Open home and enable eco-friendly filter');

@@ -46,7 +46,7 @@ test.describe('API — Toolshop Auth, Cart & Invoice', () => {
   });
 
   test('TC-API-02 products, add to cart, verify cart, COD verify invoice created successfully', {
-    tag: '@Regression',
+    tag: '@Smoke',
   }, async ({ request }) => {
  
     const user = buildUniqueUser();
