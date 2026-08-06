@@ -11,8 +11,8 @@ const billingData = require('../../../test-data/billing.json');
 
 test.describe('Add to cart and proceed to checkout', () => {
 
-  test('TC-UI-02 browse second product, add to cart and proceed to checkout and pay with COD', { tag: '@Regression' }, async ({ page }) => {
-    console.log(' Test started: Register then Login');
+  test('TC-UI-02 browse add to cart COD checkout and verify payment success', { tag: '@Regression' }, async ({ page }) => {
+    console.log('[TC-UI-02] Test started: COD checkout through payment success');
 
     const registerPage = new RegisterPage(page);
     await registerPage.goto();
@@ -20,7 +20,7 @@ test.describe('Add to cart and proceed to checkout', () => {
 
     const user = userData;
     const randomEmail = `qa.test+${Date.now()}@example.com`;
-    console.log(`[TC-UI-01] Generated email: ${randomEmail}`);
+    console.log(`[TC-UI-02] Generated email: ${randomEmail}`);
 
     await registerPage.userRegistration({
       userDetails: {
@@ -73,10 +73,10 @@ test.describe('Add to cart and proceed to checkout', () => {
     console.log('[TC-UI-02] Step 7: Click proceed-3');
     await checkoutPage.clickProceedToPayment();
 
-    // Step 8: COD → Confirm → toast → Confirm again → invoice message
-    console.log('[TC-UI-02] Step 8: COD payment, confirm, toast, confirm again, invoice');
-    await checkoutPage.completeCashOnDeliveryAndVerifyToast();
-    console.log('[TC-UI-02] Test completed successfully');
+    // Step 8: COD → Confirm → assert "Payment was successful"
+    console.log('[TC-UI-02] Step 8: COD payment and verify payment success message');
+    await checkoutPage.completeCashOnDeliveryAndVerifyPaymentSuccess();
+    console.log('[TC-UI-02] Test completed — payment success verified');
   });
 
 });

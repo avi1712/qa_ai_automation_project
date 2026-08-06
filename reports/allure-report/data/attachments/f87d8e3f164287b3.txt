@@ -1,5 +1,0 @@
-Step 1: Register — POST /users/register
-[authApi] POST /users/register
-[authApi] Register email: qa.api+1785989253950@example.com
-[authApi] Register status: 500
-Register status: 500

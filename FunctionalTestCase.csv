@@ -25,16 +25,17 @@ TC-M-05,Manual,Register rejects invalid email format,AC1,P1,@Regression,Negative
 TC-M-06,Manual,Checkout blocks empty required billing fields,AC2,P1,@Regression,Negative,"Logged-in user with item in cart; on checkout address step","1. Add a product and proceed to checkout address step
 2. Leave required billing fields empty (street city postal code)
 3. Attempt to proceed to payment","Required billing fields blank","User cannot proceed; validation messages shown for required fields","Proceed blocked until required address fields are filled",Passed,Manual only
-TC-UI-01,UI Automation,Register then login to application,AC1,P0,@Smoke,Positive,"Playwright UI project configured; test-data/user.json present","1. Open home and navigate to registration
+TC-UI-01,UI Automation,Register login and verify profile,AC1,P0,@Smoke,Positive,"Playwright UI project configured; test-data/user.json present","1. Open home and navigate to registration
 2. Register with unique timestamped email and valid user details
 3. Login with the same credentials
-4. Assert navigation to authenticated home/account state","email=qa.test+{timestamp}@example.com; password from user.json","User is registered and logged in successfully","Automation passed — register and login succeeded",Passed,tests/ui/homePageTest/homePage.spec.js
-TC-UI-02,UI Automation,Browse add to cart COD checkout Confirm twice,AC2,P0,@Regression,Positive,"Playwright UI project; billing.json and user.json available","1. Register and login with unique email
+4. Open My Profile from nav menu
+5. Assert profile shows registered first name, last name, and email","email=qa.test+{timestamp}@example.com; password from user.json; firstName/lastName from user.json","User is registered and logged in; profile displays registered first name, last name, and email","Automation passed — register, login, and profile details verified",Passed,tests/ui/homePageTest/homePage.spec.js
+TC-UI-02,UI Automation,Browse add to cart COD checkout verify payment success,AC2,P0,@Regression,Positive,"Playwright UI project; billing.json and user.json available","1. Register and login with unique email
 2. Open second product from home and add to cart (toast verified)
 3. Open cart and proceed to checkout
 4. Fill billing address and proceed to payment
-5. Select cash-on-delivery then Confirm twice
-6. Assert payment/invoice success toast or message","payment_method=cash-on-delivery; billing from billing.json; Confirm x2","COD payment completes; invoice success message shown after second Confirm","Automation passed — COD checkout and invoice flow completed",Passed,tests/ui/homePageTest/addToCartAndPayment.spec.js
+5. Select cash-on-delivery and press Confirm once
+6. Assert payment success message is shown","payment_method=cash-on-delivery; billing from billing.json","COD payment completes; Payment was successful message shown after Confirm","Automation passed — payment success message verified",Passed,tests/ui/homePageTest/addToCartAndPayment.spec.js
 TC-UI-03,UI Automation,Price range filter validates product prices,AC2,P1,@Regression,Positive,"Home page product grid and price slider available","1. Open home and verify loaded
 2. Set price range 1–100 and assert all visible prices <= 100
 3. Reload home and set price range 100–200

@@ -1,9 +1,0 @@
-[TC-UI-04] Open home and search hammer
-[HomePage] Opening home page
-[BasePage] Navigating to https://practicesoftwaretesting.com/ (waitUntil=domcontentloaded)
-[BasePage] Navigation OK: https://practicesoftwaretesting.com/
-[HomePage] Home page loaded
-[HomePage] Home page verified — search and products visible
-[HomePage] Searching for: hammer
-[HomePage] All 6 search results contain "hammer"
-[TC-UI-04] Passed

@@ -1,13 +1,14 @@
 const { test, expect } = require('@playwright/test');
 const { LoginPage } = require('../../../pages/LoginPage');
 const { RegisterPage } = require('../../../pages/RegisterPage');
+const { ProfilePage } = require('../../../pages/ProfilePage');
 const { HomePage } = require('../../../pages/HomePage');
 const userData = require('../../../test-data/user.json');
 
 
 test.describe('Register to the application', () => {
-  test('TC-UI-01 register to the application @Smoke',{ tag: '@Smoke' }, async ({ page }) => {
-    console.log('[TC-UI-01] Test started: Register then Login');
+  test('TC-UI-01 register login and verify profile @Smoke', { tag: '@Smoke' }, async ({ page }) => {
+    console.log('[TC-UI-01] Test started: Register, login, verify profile');
 
     const registerPage = new RegisterPage(page);
     await registerPage.goto();
@@ -36,6 +37,15 @@ test.describe('Register to the application', () => {
     console.log('[TC-UI-01] Registration done — starting login with same email');
     const loginPage = new LoginPage(page);
     await loginPage.verifyLoginAndNavigateToHomePage(randomEmail, user.password);
+
+    console.log('[TC-UI-01] Opening profile and verifying registered details');
+    const profilePage = new ProfilePage(page);
+    await profilePage.openProfile();
+    await profilePage.verifyRegisteredUserDetails({
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: randomEmail,
+    });
     console.log('[TC-UI-01] Test completed successfully');
   });
 

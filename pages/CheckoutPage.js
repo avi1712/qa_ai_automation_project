@@ -2,7 +2,7 @@ const { expect } = require('@playwright/test');
 const { BasePage } = require('./BasePage');
 
 /**
- * CheckoutPage — COD checkout; Confirm must be pressed TWICE for invoice
+ * CheckoutPage — COD checkout; TC-UI-02 validates payment success after Confirm #1
  */
 class CheckoutPage extends BasePage {
   /** @param {import('@playwright/test').Page} page */
@@ -103,10 +103,9 @@ class CheckoutPage extends BasePage {
   }
 
   /**
-   * COD payment: select cash-on-delivery, Confirm once, assert success message.
-   * Stops after payment success (no Confirm #2).
+   * COD payment: select cash-on-delivery, Confirm once, assert "Payment was successful".
    */
-  async completeCashOnDeliveryAndVerifyToast() {
+  async completeCashOnDeliveryAndVerifyPaymentSuccess() {
     console.log('[CheckoutPage] Waiting for payment method');
     await this.paymentMethod.waitFor({ state: 'visible' });
     await this.chooseCashOnDelivery();
@@ -115,11 +114,11 @@ class CheckoutPage extends BasePage {
     await this.confirmBtn.waitFor({ state: 'visible' });
     await expect(this.confirmBtn).toBeEnabled();
     await this.confirmBtn.click();
-    console.log('[CheckoutPage] Confirm #1 clicked');
+    console.log('[CheckoutPage] Confirm clicked');
 
     await expect(this.successMessage).toBeVisible({ timeout: 20000 });
     await expect(this.successMessage).toContainText(/Payment was successful/i);
-    console.log('[CheckoutPage] Payment success message visible');
+    console.log('[CheckoutPage] Payment success verified');
   }
 }
 

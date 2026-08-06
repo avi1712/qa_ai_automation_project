@@ -3,6 +3,15 @@
 AI-assisted QA mini project for Practice Software Testing (Toolshop).  
 Playwright (Prism-style) UI + API automation lives at the **repository root**.
 
+> ## Reviewer evidence — start here
+>
+> **Primary execution report (submission evidence):** [`execution-report/index.html`](execution-report/index.html)
+>
+> Open this Allure report first to see pass/fail status, test cases, steps, and attachments for all UI + API runs.  
+> **Easiest in Cursor / VS Code:** go to `execution-report/index.html` → **right-click** → **Open in Browser**.  
+> **No server or npm required** — also works via double-click in File Explorer, drag into Chrome/Edge/Firefox, or **File → Open** in the browser.  
+> Optional CLI: `npm run allure:open:execution`
+
 ## Project information
 
 | Item | Detail |
@@ -15,6 +24,7 @@ Playwright (Prism-style) UI + API automation lives at the **repository root**.
 | **API URL** | https://api.practicesoftwaretesting.com |
 | **API docs** | https://api.practicesoftwaretesting.com/api/documentation |
 | **Manual test cases** | `FunctionalTestCase.csv` (6 manual + 6 UI + 6 API rows) |
+| **Execution evidence (reviewers)** | **[`execution-report/index.html`](execution-report/index.html)** — static Allure report; open manually in any browser (no install/run needed) |
 | **Workflow / AI context** | `project-info.md`, `requirements-risk-analysis.md`, `ai-prompts/` |
 
 ### Prerequisites
@@ -160,6 +170,9 @@ UI and API rows in the same CSV map to automated specs via the `AutomationRef` c
 
 ## Reports — where output is generated
 
+**For reviewers:** the committed submission evidence is **`execution-report/index.html`**.  
+Working copies under `reports/` are for local runs; use `execution-report/` for assessment review.
+
 Running `npm test` (or any `playwright test` command) produces artifacts as follows:
 
 | Report / artifact | Path | When created | Committed? |
@@ -167,8 +180,26 @@ Running `npm test` (or any `playwright test` command) produces artifacts as foll
 | **Playwright HTML (final working)** | `reports/playwright-report/` (`index.html`) | Every test run | Yes (after run) |
 | **Allure raw results** | `reports/allure-results/` | Every test run | No (gitignored) |
 | **Allure HTML (working)** | `reports/allure-report/` | After `npm run allure:generate` | Yes |
-| **Static Allure (submission)** | `execution-report/` (`index.html`) | After `npm run allure:execution-report` | Yes |
+| **Static Allure (submission evidence)** | **`execution-report/index.html`** | After `npm run allure:execution-report` | **Yes — open this for review** |
 | **Traces / screenshots / video** | `reports/test-results/` | On failure / retry (UI) | No (gitignored) |
+
+### Reviewer evidence — `execution-report/index.html`
+
+This is the **primary report for assessment review**. It is a static Allure HTML bundle committed in the repo — reviewers can open it **manually in a browser** without running tests or starting a local server.
+
+| How to open | Action |
+|-------------|--------|
+| **IDE (recommended)** | In the repo tree, open `execution-report/index.html` → **right-click** → **Open in Browser** |
+| **Manual (any browser)** | Double-click `execution-report/index.html`, drag the file into Chrome/Edge/Firefox, or use **File → Open** in the browser |
+| **CLI (optional)** | `npm run allure:open:execution` |
+| **Windows file URL** | Paste in browser address bar: `file:///D:/Assignment/qa-ai-practical-assessment/execution-report/index.html` (adjust path to your clone) |
+
+After a fresh local run, regenerate before sharing:
+
+```bash
+npm test
+npm run allure:execution-report
+```
 
 ### Generate Allure HTML (after tests finish)
 
@@ -204,17 +235,6 @@ npm test
 npm run allure:generate
 npm run allure:execution-report
 ```
-
-**Primary report to open for reviewers:** `execution-report/index.html`
-
-Ways to open:
-
-1. **File Explorer** — double-click `execution-report/index.html`
-2. **IDE** — right-click `execution-report/index.html` → Open in Browser
-3. **CLI** — `npm run allure:open:execution`
-4. **Windows file URL example:**  
-   `file:///D:/Assignment/qa-ai-practical-assessment/execution-report/index.html`  
-   (adjust drive/path to your clone)
 
 ---
 
