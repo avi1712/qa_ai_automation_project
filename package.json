@@ -1,0 +1,32 @@
+
+{
+  "name": "prismstructure-toolshop-playwright",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Prism-style Playwright framework for Practice Software Testing Toolshop (UI + API)",
+  "scripts": {
+    "test": "playwright test",
+    "test:smoke": "playwright test --grep @Smoke",
+    "test:regression": "playwright test --grep @Regression",
+    "test:ui": "playwright test tests/ui --headed",
+    "test:api": "playwright test tests/api/api.spec.js --project=api",
+    "test:api:smoke": "playwright test tests/api --grep @Smoke --project=api",
+    "test:api:regression": "playwright test tests/api --grep @Regression --project=api",
+    "test:home": "playwright test tests/ui/homePageTest/homePage.spec.js --headed",
+    "test:headed": "playwright test --headed",
+    "report": "playwright show-report reports/playwright-report",
+    "allure:generate": "allure generate reports/allure-results --clean -o reports/allure-report",
+    "allure:execution-report": "allure generate reports/allure-results --clean -o execution-report",
+    "allure:open": "allure open reports/allure-report",
+    "allure:open:execution": "allure open execution-report",
+    "allure:clean": "node -e \"const fs=require('fs');['reports/allure-results','reports/allure-report','execution-report'].forEach(d=>{fs.rmSync(d,{recursive:true,force:true});fs.mkdirSync(d,{recursive:true});console.log('Cleaned:',d)})\"",
+    "allure:report": "npm run allure:generate && npm run allure:execution-report && npm run allure:open",
+    "codegen": "playwright codegen https://practicesoftwaretesting.com/"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.54.2",
+    "@types/node": "^26.1.2",
+    "allure-commandline": "^2.43.0",
+    "allure-playwright": "^3.10.2"
+  }
+}

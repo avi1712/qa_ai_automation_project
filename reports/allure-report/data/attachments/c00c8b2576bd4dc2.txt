@@ -1,0 +1,10 @@
+[TC-UI-06] Open home and enable eco-friendly filter
+[HomePage] Opening home page
+[BasePage] Navigating to https://practicesoftwaretesting.com/ (waitUntil=domcontentloaded)
+[BasePage] Navigation OK: https://practicesoftwaretesting.com/
+[HomePage] Home page loaded
+[HomePage] Home page verified — search and products visible
+[HomePage] Enabling eco-friendly filter
+[HomePage] Eco-friendly filter applied
+[HomePage] All 9 visible products show eco badge/label
+[TC-UI-06] Passed

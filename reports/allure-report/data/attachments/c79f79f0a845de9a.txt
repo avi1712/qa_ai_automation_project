@@ -1,0 +1,6 @@
+Step 1: Get products — GET /products
+[productsApi] GET /products
+[productsApi] Get products status: 200
+Products status: 200
+Product count: 9
+First product successfully retrieved: Combination Pliers

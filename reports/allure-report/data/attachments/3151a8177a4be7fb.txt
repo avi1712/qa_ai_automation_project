@@ -1,0 +1,6 @@
+Step 1: Search products — GET /products/search?q=hammer
+[productsApi] GET /products/search
+[productsApi]  get products by search query status: 200
+Search status: 200
+Search result count: 6
+First matching product: Claw Hammer with Shock Reduction Grip

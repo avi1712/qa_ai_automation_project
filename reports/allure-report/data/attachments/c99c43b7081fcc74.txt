@@ -1,0 +1,8 @@
+Step 1: Login with wrong password — POST /users/login
+[authApi] POST /users/login
+[authApi] Login email: customer@practicesoftwaretesting.com
+[authApi] Login status: 500
+[authApi] Bearer token received: false
+Login status: 500
+Error: Something went wrong
+Bearer token received: false

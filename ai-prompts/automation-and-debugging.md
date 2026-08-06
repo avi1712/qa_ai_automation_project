@@ -65,7 +65,7 @@ Implement 5 API tests (Smoke + Regression) for Toolshop AC1/AC2 against live API
 Verified live: register needs `address` object + non-leaked password; add item via `POST /carts/{id}`; invoice COD `201` with Bearer. Added `api` Playwright project (`baseURL` api host), helpers + `apiLogger`, 3 smoke + 2 regression. All 5 passed (~10s).
 
 **Validation Notes:**  
-Folder: `PrismStructure_QA_Automation`. Run: `npx playwright test --project=api`.
+Folder: repo root (Playwright Prism layout). Run: `npx playwright test --project=api`.
 
 ---
 

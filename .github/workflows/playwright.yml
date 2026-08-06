@@ -8,9 +8,6 @@ jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: PrismStructure_QA_Automation
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
@@ -33,11 +30,20 @@ jobs:
       if: ${{ !cancelled() }}
       with:
         name: playwright-report
-        path: PrismStructure_QA_Automation/reports/playwright-report/
+        path: reports/playwright-report/
         retention-days: 30
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
         name: allure-report
-        path: PrismStructure_QA_Automation/reports/allure-report/
+        path: reports/allure-report/
+        retention-days: 30
+    - name: Generate static Allure into execution-report
+      if: ${{ !cancelled() }}
+      run: npm run allure:execution-report
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: execution-report
+        path: execution-report/
         retention-days: 30

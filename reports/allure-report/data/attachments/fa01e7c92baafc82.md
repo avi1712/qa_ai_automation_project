@@ -1,0 +1,62 @@
+# Page snapshot
+
+```yaml
+- text: View the
+- link "Documentation":
+  - /url: https://testsmith-io.github.io/practice-software-testing/#/
+- text: for this application. Practice Black Box Testing & Bug Hunting
+- button "Testing Guide"
+- button "🐛 Bug Hunting"
+- navigation:
+  - link "Practice Software Testing - Toolshop":
+    - /url: /
+    - img
+  - menubar "Main menu":
+    - menuitem "Home":
+      - link "Home":
+        - /url: /
+    - menuitem "Categories":
+      - button "Categories"
+    - menuitem "Contact":
+      - link "Contact":
+        - /url: /contact
+    - menuitem "Avinash Kumar":
+      - button "Avinash Kumar"
+    - menuitem "cart":
+      - link "cart":
+        - /url: /checkout
+        - text: "1"
+  - button "Select language": EN
+- list:
+  - listitem: Cart 1
+  - listitem: Sign in 2
+  - listitem: Billing Address 3
+  - listitem: Payment 4
+- heading "Payment" [level=3]
+- text: Payment Method
+- combobox "Payment Method":
+  - option "Choose your payment method" [disabled]
+  - option "Bank Transfer"
+  - option "Cash on Delivery" [selected]
+  - option "Credit Card"
+  - option "Buy Now Pay Later"
+  - option "Gift Card"
+- text: Payment was successful
+- button "Confirm"
+- contentinfo:
+  - text: This is a DEMO application (
+  - link "GitHub repo":
+    - /url: https://github.com/testsmith-io/practice-software-testing
+  - text: ), used for software testing training purpose. |
+  - link "Privacy Policy":
+    - /url: /privacy
+  - text: "| Banner photo by"
+  - link "Barn Images":
+    - /url: https://unsplash.com/@barnimages
+  - text: "on"
+  - link "Unsplash":
+    - /url: https://unsplash.com/photos/t5YUoHW6zRo
+  - text: . v2.3 | Built 2026-07-17 | Angular 20.0.5
+- button "Open chat":
+  - img
+```
