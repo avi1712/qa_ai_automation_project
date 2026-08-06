@@ -44,6 +44,24 @@ class ProfilePage extends BasePage {
     }
     await invoicesLink.waitFor({ state: 'visible' });
     await invoicesLink.click();
+    await this.page.waitForURL(/\/account\/invoices/i, { timeout: 15000 });
+    console.log('[ProfilePage] My Invoices page loaded:', await this.url());
+  }
+
+  /**
+   * Assert invoice appears under My Invoices (by INV- number when known).
+   * @param {string} [invoiceNumber]
+   */
+  async verifyInvoiceListed(invoiceNumber) {
+    console.log('[ProfilePage] Verifying invoice under My Invoices:', invoiceNumber || '(any INV-)');
+    if (invoiceNumber) {
+      const row = this.page.getByText(invoiceNumber, { exact: false });
+      await expect(row.first()).toBeVisible({ timeout: 20000 });
+      console.log('[ProfilePage] Invoice found:', invoiceNumber);
+      return;
+    }
+    await expect(this.page.getByText(/INV-\d+/i).first()).toBeVisible({ timeout: 20000 });
+    console.log('[ProfilePage] At least one invoice listed');
   }
 }
 

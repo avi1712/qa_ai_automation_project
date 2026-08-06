@@ -41,13 +41,13 @@ Opened `RegisterPage.userRegistration()` — field names match JSON keys passed 
 ## Entry 3 — UI checkout billing (`test-data/billing.json`)
 
 **Prompt:**  
-Create billing JSON for UI COD checkout aligned with assessment sample and `CheckoutPage.fillBillingAddress()`.
+Align UI billing with API `billing-api.json` so TC-UI-02 invoice matches TC-API-02. Handle UI postcode-lookup vs API direct POST.
 
 **AI Response Summary:**  
-`billing.json`: `billing_street`, `billing_city`, `billing_state`, `billing_country` (`TG`), `billing_postal_code`, `billing_house_number`, `payment_method` COD, empty `payment_details`. Loaded in `addToCartAndPayment.spec.js` → `checkoutPage.fillBillingAddress(billingData)`.
+`billing.json` same fields as API: `Zoey Shore` / `Hesselbury` / `Florida` / **`TG`** / **`1234AA`** / house **`A42`** / COD. `CheckoutPage.fillBillingAddress()` selects country label Togo (control value `TG`), stubs `**/postcode*` lookup (UI-only), waits out profile `getDetails` race, fills house last.
 
 **Validation Notes:**  
-Live run TC-UI-02 — `proceed-3` enables after fill. Country `TG` maps to label `Togo` in `CheckoutPage` countryLabels. CSV TC-UI-02 TestData references `billing.json`. **Correctness:** field keys match page object locators (`billing_street` etc.).
+API TC-API-02: `TG`+`1234AA` → invoice **201**. UI without stub: proceed disabled or invoice **422**. With stub + fill order: Confirm #2 → same payload → **201**. Country `inputValue()` logged as `TG`. **Correctness:** UI billing file kept in sync with `billing-api.json`.
 
 ---
 
@@ -57,10 +57,10 @@ Live run TC-UI-02 — `proceed-3` enables after fill. Country `TG` maps to label
 Using the assessment sample invoice JSON, create API billing template without dynamic `cart_id` — list required fields and negative variants.
 
 **AI Response Summary:**  
-`billing-api.json`: billing_* fields + COD + `payment_details: {}`. No `cart_id` in file — injected by `buildCodInvoicePayload(cartId)`. Negatives: missing Bearer (TC-API-05); wrong password uses separate credentials (TC-API-04); optional missing `cart_id` variant documented in plan.
+`billing-api.json`: billing_* fields + COD + `payment_details: {}`. No `cart_id` in file — injected by `buildCodInvoicePayload(cartId)`. Negatives: missing Bearer (TC-API-05); wrong password uses separate credentials (TC-API-04).
 
 **Validation Notes:**  
-Compared to assessment sample in `project-info.md`. Live `POST /invoices` with merged payload returns 201 + `invoice_number` (TC-API-02). **Correctness:** OpenAPI field names verified — not AI-invented `billing_*` spellings. `billing_house_number` in API file (`A42`) vs UI `42` — both accepted by respective layers.
+Live `POST /invoices` returns 201 + `invoice_number` (TC-API-02). Reference for UI billing — same `TG` / `1234AA` / `A42`. **Correctness:** OpenAPI field names verified.
 
 ---
 
@@ -173,7 +173,7 @@ Grep repo — no `access_token` literals in `test-data/`. `authApi` logs `Boolea
 | Source | Path / function | Used by | Dynamic? |
 |--------|-----------------|---------|----------|
 | UI user defaults | `test-data/user.json` | TC-UI-01, TC-UI-02 | Email at runtime |
-| UI billing | `test-data/billing.json` | TC-UI-02 | Static |
+| UI billing | `test-data/billing.json` | TC-UI-02 | Static — synced with `billing-api.json` (`TG`/`1234AA`/`A42`); UI stubs postcode-lookup |
 | API billing template | `test-data/billing-api.json` | `buildCodInvoicePayload()` | `cart_id` at runtime |
 | API user builder | `buildUniqueUser()` | TC-API-01, TC-API-02, fixture | Email per call |
 | Negative login | Inline in spec / CSV | TC-API-04, TC-M-02 | Static demo email |

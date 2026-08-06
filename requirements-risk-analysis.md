@@ -51,9 +51,9 @@ This artifact is **mandatory content** for the assessment. The PDF does not alwa
 |------|--------|
 | **PDF intent** | Register with valid details → login with same credentials → verify profile (p. 5) |
 | **Actors** | Guest → Registered Customer |
-| **UI path** | Home → Sign in → Register → fill form → login → authenticated home/account |
+| **UI path** | Home → Sign in → Register → fill form → login → **My profile** (name + email) |
 | **Preconditions** | Unique email; password meeting app rules |
-| **Main success** | Registration succeeds; login succeeds; user sees authenticated state |
+| **Main success** | Registration succeeds; login succeeds; profile shows registered first/last name and email |
 | **Failures of interest** | Wrong password, invalid email format, empty required fields |
 
 ### AC1 — User Authentication & Cart Creation (API)
@@ -70,8 +70,8 @@ This artifact is **mandatory content** for the assessment. The PDF does not alwa
 | Item | Detail |
 |------|--------|
 | **PDF intent** | Browse → multi-item cart + qty update → COD checkout → invoice in **My Invoices**; **Confirm twice** (p. 5) |
-| **UI path** | Product browse → add to cart → checkout → billing address → COD → Confirm×2 → success message / invoice |
-| **Main success** | Order completes; invoice evidence after second Confirm |
+| **UI path** | Product browse → add to cart → checkout → billing address → COD → **Confirm #1** (payment success) → **Confirm #2** (invoice) → **My Invoices** |
+| **Main success** | Payment success after Confirm #1; `INV-` thank-you after Confirm #2; invoice listed under My Invoices |
 | **Failures of interest** | Empty required billing fields, checkout without items |
 
 ### AC2 — Product Selection & Invoice Generation (API)
@@ -80,7 +80,7 @@ This artifact is **mandatory content** for the assessment. The PDF does not alwa
 |------|--------|
 | **PDF intent** | Bearer token → products → add to cart → verify cart → invoice with billing (p. 6) |
 | **API path** | `GET /products` → `POST /carts` / `POST /carts/{id}` → `GET /carts/{id}` → `POST /invoices` |
-| **Sample invoice body** | `billing_*`, `payment_method: cash-on-delivery`, `cart_id`, `payment_details: {}` (PDF p. 6) |
+| **Sample invoice body** | `billing_*`, `payment_method: cash-on-delivery`, `cart_id`, `payment_details: {}` (PDF p. 6) — live Core uses `TG` + `1234AA` + house `A42` (same as UI `billing.json`) |
 | **Main success** | 201 invoice with `invoice_number` |
 | **Failures of interest** | No Bearer (401), invalid payload |
 
@@ -88,11 +88,12 @@ This artifact is **mandatory content** for the assessment. The PDF does not alwa
 
 | # | Ambiguity | Resolution |
 |---|-----------|------------|
-| 1 | Profile page URL/labels | Login asserts authenticated home; profile flow covered in TC-M-01 manual |
+| 1 | Profile page URL/labels | **Resolved:** user menu → link **My profile**; fields `data-test="first-name"|"last-name"|"email"`. TC-UI-01 + TC-M-01 |
 | 2 | Guest cart merge after login | TC-UI-02 registers before checkout — logged-in cart path |
-| 3 | Confirm control names | `data-test="finish"` on CheckoutPage; Confirm #1 + success toast in automation |
+| 3 | Confirm control names / ×2 behaviour | **Resolved:** `data-test="finish"`. Angular: Confirm #1 = payment check only; Confirm #2 = `POST /invoices`. Hard-click #2 in `CheckoutPage`; TC-UI-02 + TC-M-03 |
 | 4 | `POST /carts` auth | Cart create uses Bearer in TC-API-01 |
 | 5 | Invoice endpoint/body vs OpenAPI | Live verify: `POST /invoices`, nested `address` on register, cart add via `POST /carts/{id}` |
+| 6 | UI billing vs API (postcode-lookup) | **Resolved:** UI address step calls `GET /postcode-lookup` (API does not). Stub lookup in TC-UI-02 so `TG`+`1234AA` matches API `billing-api.json`; wait out profile `getDetails` race |
 
 ---
 
@@ -100,9 +101,9 @@ This artifact is **mandatory content** for the assessment. The PDF does not alwa
 
 | Flow | Valid (positive) | Invalid (negative / edge) |
 |------|------------------|---------------------------|
-| **Auth UI** | TC-M-01, TC-UI-01 register + login | TC-M-02 wrong password; TC-M-05 invalid email |
+| **Auth UI** | TC-M-01, TC-UI-01 register + login + **profile** | TC-M-02 wrong password; TC-M-05 invalid email |
 | **Auth API** | TC-API-01 register/login/cart | TC-API-04 wrong password |
-| **Checkout UI** | TC-M-03, TC-M-04 COD + multi-item | TC-M-06 empty billing |
+| **Checkout UI** | TC-M-03 Confirm×2; TC-M-04 multi-item; **TC-UI-02 Confirm×2 + My Invoices** | TC-M-06 empty billing |
 | **Checkout API** | TC-API-02 COD invoice 201 | TC-API-05 no Bearer 401 |
 | **Catalog UI** | TC-UI-04–06 search/filter | TC-UI-03 price boundary asserts |
 | **Catalog API** | TC-API-03 products; TC-API-06 search | — |
@@ -116,9 +117,9 @@ This artifact is **mandatory content** for the assessment. The PDF does not alwa
 | R1 | Auth broken (register/login) | Blocks all purchase flows | Med | UI+API | Smoke: TC-M-01, TC-UI-01, TC-API-01 |
 | R2 | Token not applied on protected calls | False pass / silent 401 | Med | API | TC-API-05 asserts 401 without Bearer |
 | R3 | Cart contents wrong after qty / multi-item | Wrong order total | Med | UI+API | TC-M-04; TC-API-02 cart verify |
-| R4 | Single Confirm only → no invoice | Lost order evidence | **High** | UI | TC-M-03, TC-UI-02 document Confirm×2; CheckoutPage COD flow |
-| R5 | Invoice payload validation gaps | Bad orders / unclear 4xx | Med | API | TC-API-02 positive payload; TC-API-05 negative auth |
-| R6 | Flaky locators / timing | Unreliable runs | Med | UI | `data-test` locators; `domcontentloaded`; Playwright expects |
+| R4 | Single Confirm only → no invoice | Lost order evidence | **High** | UI | TC-M-03; **TC-UI-02** hard-click Confirm #1+#2, assert `INV-`, verify under My Invoices |
+| R5 | Invoice payload validation gaps | Bad orders / unclear 4xx | Med | UI+API | TC-API-02 (`TG`+`1234AA`); TC-UI-02 same billing + postcode stub; TC-API-05 401 |
+| R6 | Flaky locators / timing / overlays | Unreliable runs | Med | UI | `data-test`; `domcontentloaded`; force Confirm #2; hide chat FAB; profile menu by role |
 | R7 | Test data collision (same email) | Intermittent failures | Med | Both | Timestamped emails; `buildUniqueUser()` |
 | R8 | Scope explosion | Weak artifacts | Med | Process | Hard cap 6 cases/type; Stretch cut |
 
@@ -153,8 +154,8 @@ Target: **6** scenarios each for Manual, UI automation, API automation (PDF cap 
 
 | ID | Maps to | Tag | Spec / notes |
 |----|---------|-----|--------------|
-| TC-UI-01 | AC1 | @Smoke | `homePage.spec.js` — register + login |
-| TC-UI-02 | AC2 | @Regression | `addToCartAndPayment.spec.js` — COD checkout |
+| TC-UI-01 | AC1 | @Smoke | `homePage.spec.js` — register + login + **My profile** (name/email) |
+| TC-UI-02 | AC2 | @Regression | `addToCartAndPayment.spec.js` — COD, **Confirm×2**, invoice `INV-`, **My Invoices** |
 | TC-UI-03 | AC2 | @Regression | `homePage.spec.js` — price slider 1–100 / 100–200 |
 | TC-UI-04 | AC2 | @Smoke | `homePage.spec.js` — search hammer |
 | TC-UI-05 | AC2 | @Smoke | `homePage.spec.js` — Hammer category |
@@ -201,7 +202,16 @@ Target: **6** scenarios each for Manual, UI automation, API automation (PDF cap 
 ## 7. Test data strategy (pointer)
 
 Detailed AI prompts and file map: `ai-prompts/test-data.md`.  
-Summary: `test-data/user.json`, `billing.json`, `billing-api.json`, `utils/payloadBuilder.js`; timestamp emails; dynamic `product_id` / `cart_id`.
+
+| Source | Notes |
+|--------|--------|
+| `test-data/user.json` | UI register defaults; email at runtime |
+| `test-data/billing.json` | UI COD — **synced with** `billing-api.json` (`TG`, `1234AA`, house `A42`) |
+| `test-data/billing-api.json` | API COD invoice template; `cart_id` at runtime |
+| `utils/payloadBuilder.js` | Unique API users + COD invoice builder |
+| UI-only | Stub `GET /postcode-lookup` in TC-UI-02 (API never uses it) |
+
+Timestamp emails; dynamic `product_id` / `cart_id` from live responses.
 
 ---
 
@@ -209,7 +219,7 @@ Summary: `test-data/user.json`, `billing.json`, `billing-api.json`, `utils/paylo
 
 | Evidence | Path |
 |----------|------|
-| Static Allure (submission) | `execution-report/index.html` |
+| Static Allure (submission — **primary for reviewers**) | `execution-report/index.html` (right-click → Open in Browser) |
 | Playwright HTML | `reports/playwright-report/` |
 | CSV status | `FunctionalTestCase.csv` — all rows `Passed` |
 | Generate Allure | `npm test` → `npm run allure:execution-report` |
@@ -219,7 +229,7 @@ Summary: `test-data/user.json`, `billing.json`, `billing-api.json`, `utils/paylo
 ## 9. AI usage on this artifact
 
 - Cursor drafted AC tables, risks, and traceability from PDF Part B flows (`ai-prompts/requirements-and-planning.md`).  
-- Human adjusted UI/API IDs after live SUT validation (catalog specs TC-UI-03…06; API-02 regression tag for full invoice flow).  
+- Human adjusted after live SUT validation: catalog TC-UI-03…06; API-02 regression; **TC-UI-01 profile**; **TC-UI-02 Confirm×2 + My Invoices**; UI/API billing + postcode stub (`ai-prompts/automation-and-debugging.md` Entries 14–16).  
 - This file = **analysis artifact** (Common QA #1); prompt history = `ai-prompts/requirements-and-planning.md`.
 
 ---
@@ -235,4 +245,4 @@ Summary: `test-data/user.json`, `billing.json`, `billing-api.json`, `utils/paylo
 | 5–8 cases per type + tags | §5 tables |
 | Execution evidence pointer | §8 |
 
-*Last aligned to implemented suite and `FunctionalTestCase.csv` — 2026-08-06.*
+*Last aligned to implemented suite and `FunctionalTestCase.csv` — 2026-08-07.*

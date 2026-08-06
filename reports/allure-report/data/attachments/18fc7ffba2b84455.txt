@@ -1,9 +1,0 @@
-Step 1: Login with wrong password — POST /users/login
-[authApi] POST /users/login
-[authApi] Login email: customer@practicesoftwaretesting.com
-[authApi] Login status: 423
-[authApi] Bearer token received: false
-Login status: 423
-Error: Account locked, too many failed attempts. Please contact the administrator.
-Bearer token received: false
-Login with wrong password failed correctly

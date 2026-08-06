@@ -53,29 +53,29 @@ Walked live UI to align step labels (Sign in, Register, My Invoices, Confirm). W
 
 ---
 
-## Entry 4 — UI automation: AC1 register and login (TC-UI-01)
+## Entry 4 — UI automation: AC1 register, login, verify profile (TC-UI-01)
 
 **Prompt:**  
-Design a **UI automation** scenario for AC1: register with unique email, login with same credentials, assert authenticated state. Use `test-data/user.json` for static fields. Tag `@Smoke`. One spec file pattern for home/catalog tests.
+Design a **UI automation** scenario for AC1: register with unique email, login with same credentials, open profile, assert name and email. Use `test-data/user.json`. Tag `@Smoke`.
 
 **AI Response Summary:**  
-TC-UI-01 in `tests/ui/homePageTest/homePage.spec.js`: open home → register via RegisterPage → login via LoginPage → assert home/account state. Email `qa.test+{timestamp}@example.com`. Uses Playwright UI Tests project, Chromium 1920×1080 viewport.
+TC-UI-01 in `homePage.spec.js`: register → login → `ProfilePage.openProfile()` → `verifyRegisteredUserDetails({ firstName, lastName, email })`. Email `qa.test+{timestamp}@example.com`.
 
 **Validation Notes:**  
-Ran `npx playwright test tests/ui/homePageTest/homePage.spec.js --grep "TC-UI-01" --project="UI Tests"`. CSV row TC-UI-01 AutomationRef points to same spec. Register/login locators verified on live SUT, not invented.
+Live nav uses **My profile** link under user menu (not `data-test="nav-profile"`). Asserts `[data-test="first-name"|"last-name"|"email"]`. CSV TC-UI-01 steps include profile. Local run passed.
 
 ---
 
-## Entry 5 — UI automation: AC2 COD checkout with Confirm×2 (TC-UI-02)
+## Entry 5 — UI automation: AC2 COD Confirm×2 + My Invoices (TC-UI-02)
 
 **Prompt:**  
-Design UI E2E for AC2: logged-in user, add product to cart, checkout with **Cash on Delivery**, press **Confirm twice**, assert invoice/payment success. Avoid flake — model two explicit Confirm actions. Use `billing.json`.
+Design UI E2E for AC2: COD checkout, **Confirm twice** (hard-click #2), assert payment success then invoice, open **My Invoices** and verify `INV-` number. Use API-aligned `billing.json`.
 
 **AI Response Summary:**  
-TC-UI-02 in `addToCartAndPayment.spec.js`: register+login → second product → add to cart (toast) → cart → checkout → fill billing from `billing.json` → COD → `CheckoutPage.confirmPaymentTwice()` with separate expects after each Confirm. Tag `@Regression` (long flow).
+TC-UI-02 in `addToCartAndPayment.spec.js`: register+login → product → cart → checkout → fill billing → COD → Confirm #1 (payment success) → Confirm #2 (force) → capture `INV-` → `ProfilePage.openMyInvoices()` + `verifyInvoiceListed`. Tag `@Regression`.
 
 **Validation Notes:**  
-Checked `CheckoutPage.js`: `data-test="finish"` clicked twice; success message locator `payment-success-message`. Manual quirk R4 mitigated. CSV TC-UI-02 Steps include “Confirm x2”. Local run passed; Status=Passed in CSV.
+Angular: #1 = payment check only; #2 = `POST /invoices`. Stub UI postcode-lookup so `TG`+`1234AA` matches API. Hard-click Confirm #2. CSV documents Confirm×2 + My Invoices. Local run: invoice **201**, My Invoices lists same number. Status=Passed.
 
 ---
 
@@ -154,13 +154,13 @@ Rules copied to `project-info.md` §6 and `.cursor/rules/qa-toolshop.mdc`. Used 
 Review the full designed suite (CSV + specs): is **coverage complete** for Core ACs and risks, and is every automated case **correct** against live SUT?
 
 **AI Response Summary:**  
-AC1 covered: manual profile (M-01), UI register/login (UI-01), API auth+cart (API-01), negatives M-02/M-05, API-04. AC2 covered: manual COD+qty (M-03/M-04/M-06), UI checkout (UI-02), catalog (UI-03…06), API cart+invoice (API-02), products/search (API-03/06), API-05 unauthorized. Risks R1–R5 mitigated. R6: role/data-test locators + `domcontentloaded`. R7: timestamp emails. R8: 6 cases/type cap held.
+AC1 covered: manual profile (M-01), UI register/login/**profile** (UI-01), API auth+cart (API-01), negatives M-02/M-05, API-04. AC2 covered: manual COD+qty (M-03/M-04/M-06), UI Confirm×2 + My Invoices (UI-02), catalog (UI-03…06), API cart+invoice (API-02), products/search (API-03/06), API-05 unauthorized. Risks R1–R5 mitigated (R4 via Confirm×2). R6: `data-test` + force Confirm #2. R7: timestamp emails. R8: 6 cases/type cap held.
 
 **Validation Notes:**  
-- Ran `npm test` — all specs passed.  
-- Generated Allure → `execution-report/` matches CSV Status=Passed.  
-- Grep `FunctionalTestCase.csv` for AC1/AC2 MapsTo — no orphan rows.  
-- Confirmed TC-UI-02 and TC-M-03 both document Confirm×2 (consistency check).
+- TC-UI-01 profile + TC-UI-02 Confirm×2/My Invoices verified live (2026-08-07).  
+- API TC-API-02 green with same TG billing as UI.  
+- CSV TC-UI-02 / TC-M-03 both document Confirm×2.  
+- Regenerate `execution-report/` after full suite before submission.
 
 ---
 

@@ -1,0 +1,85 @@
+[TC-UI-02] Test started: COD checkout, Confirm x2, My Invoices
+[RegisterPage] Opening home page
+[BasePage] Navigating to https://practicesoftwaretesting.com/ (waitUntil=domcontentloaded)
+[BasePage] Navigation OK: https://practicesoftwaretesting.com/
+[RegisterPage] Home page loaded
+[RegisterPage] Navigating to registration page
+[RegisterPage] Register your account clicked
+[TC-UI-02] Generated email: qa.test+1786050521399@example.com
+[RegisterPage] Starting registration for: qa.test+1786050521399@example.com
+[RegisterPage] First name filled: Avinash
+[RegisterPage] Last name filled: Kumar
+[RegisterPage] DOB filled: 2000-01-01
+[RegisterPage] Country selected (index 1)
+[RegisterPage] Postal code filled: 1234AA
+[RegisterPage] House number filled: 42
+[RegisterPage] Street filled: 1234 Main St
+[RegisterPage] City filled: New York
+[RegisterPage] State filled: NY
+[RegisterPage] Phone filled: 1234567890
+[RegisterPage] Email filled: qa.test+1786050521399@example.com
+[RegisterPage] Password filled
+[RegisterPage] Register button clicked
+[RegisterPage] Registration completed
+[TC-UI-02] Step 1Registration done — starting login with same email
+[LoginPage] Starting login for: qa.test+1786050521399@example.com
+[LoginPage] Email filled
+[LoginPage] Password filled
+[LoginPage] Login button clicked
+[LoginPage] Assert passed: Menu is visible
+[LoginPage] Login successful
+[LoginPage] Home page clicked
+[HomePage] Home page verified — search and products visible
+[TC-UI-02] Step 2: Click second product
+[HomePage] Clicking second product card
+[HomePage] Second product card clicked
+[TC-UI-02] Step 5: Verify toast message
+[ProductPage] Product detail loaded:  Slip Joint Pliers 
+[ProductPage] Clicking Add to cart
+[ProductPage] Add to cart clicked
+[ProductPage] Toast verified: Product added to shopping cart.
+[ProductPage] Toast dismissed
+[TC-UI-02] Cart page URL: https://practicesoftwaretesting.com/product/01KZCE13KCDVDQCDJ8C1SM8N37
+[CartPage] Clicking cart icon
+[CartPage] Cart icon clicked
+[CartPage] Opening cart and proceeding to checkout
+[CartPage] Opened cart and proceeded to checkout
+[TC-UI-02] Step 5: Click proceed-2
+[CheckoutPage] Clicking proceed-2
+[CheckoutPage] proceed-2 clicked
+[TC-UI-02] Step 6: Fill billing address
+[CheckoutPage] Filling billing address (API-aligned)
+[CheckoutPage] Country selected: Togo (code target TG)
+[CheckoutPage] Country control value: TG
+[CheckoutPage] Postal code filled: 1234AA
+[CheckoutPage] House number filled: A42
+[CheckoutPage] Stubbing postcode-lookup → {"street":"Zoey Shore","house_number":"A42","city":"Hesselbury","state":"Florida","country":"TG","postcode":"1234AA"}
+[CheckoutPage] Street filled: Zoey Shore
+[CheckoutPage] City filled: Hesselbury
+[CheckoutPage] State filled: Florida
+[CheckoutPage] Postal code (final) filled: 1234AA
+[CheckoutPage] House number (final) filled: A42
+[CheckoutPage] Street (final) filled: Zoey Shore
+[CheckoutPage] City (final) filled: Hesselbury
+[CheckoutPage] State (final) filled: Florida
+[CheckoutPage] Proceed to checkout (proceed-3) is enabled
+[TC-UI-02] Step 7: Click proceed-3
+[CheckoutPage] Clicking proceed-3
+[CheckoutPage] proceed-3 clicked
+[TC-UI-02] Step 8: COD payment, Confirm x2, capture invoice number
+[CheckoutPage] Waiting for payment method
+[CheckoutPage] Payment method: cash-on-delivery
+[CheckoutPage] Confirm #1 hard-clicked (force)
+[CheckoutPage] Payment check status: 200
+[CheckoutPage] Payment success verified after Confirm #1
+[CheckoutPage] Confirm #2 attempt 1
+[CheckoutPage] Confirm #2 (force) hard-clicked (force)
+[CheckoutPage] POST /invoices request: {"billing_street":"Zoey Shore","billing_city":"Hesselbury","billing_state":"Florida","billing_country":"TG","billing_postal_code":"1234AA","payment_method":"cash-on-delivery","payment_details":{},"cart_id":"01kzcegs6jw9g31jb70xenzn20"}
+[CheckoutPage] POST /invoices status: 201
+[CheckoutPage] POST /invoices body: {"billing_street":"Zoey Shore","billing_city":"Hesselbury","billing_state":"Florida","billing_country":"TG","billing_postal_code":"1234AA","user_id":"01kzcegc5arsft2x254tpfhb4a","invoice_date":"2026-08-06T21:09:09.370884Z","invoice_number":"INV-2026000014","id":"01kzceh5m0y5e32j524zj1xra3","created_
+[CheckoutPage] Invoice confirmed after Confirm #2: INV-2026000014
+[TC-UI-02] Step 9: Open My Invoices and verify invoice INV-2026000014
+[ProfilePage] My Invoices page loaded: https://practicesoftwaretesting.com/account/invoices
+[ProfilePage] Verifying invoice under My Invoices: INV-2026000014
+[ProfilePage] Invoice found: INV-2026000014
+[TC-UI-02] Test completed — invoice verified under My Invoices

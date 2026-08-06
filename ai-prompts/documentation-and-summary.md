@@ -147,13 +147,13 @@ Added per-spec entries (TC-UI-01…06, TC-API-01…06). Validation Notes documen
 Check `ai-prompts/automation-and-debugging.md` — structure, failures, Debugging Outcome field.
 
 **AI Response Summary:**  
-13 entries: Prism layout, Confirm×2, debug protocol, config, API live verify, networkidle fix, billing proceed-3, assertions, Allure pipeline, POM locators, fixtures, local-only runs. Summary health table + failure template.
+16 entries (through 2026-08-07): Prism layout, Confirm×2 (full hard-click + invoice), debug protocol, config, API live verify, networkidle fix, billing proceed-3, assertions, Allure, POM, fixtures, local-only, invoice 422 diagnosis, postcode stub + profile race, TC-UI-01 profile. Summary health table + failure template.
 
 **Edits You Made:**  
-Replaced Validation Notes with **Debugging Outcome** (helped vs misled). Reframed CI entry as local networkidle fix. Honest note on Confirm×2 partial implementation in `CheckoutPage`.
+Replaced Validation Notes with **Debugging Outcome**. Updated Entry 2 — Confirm×2 no longer partial; Entries 14–16 document invoice 422 / postcode stub / profile assert. Removed outdated “Confirm #2 gap” claim.
 
 **Reason for Edits:**  
-**Correctness** — debug log reflects real fixes, not aspirational. **Tone** — credits AI when wrong (localhost suggestion). **Clarity** — Debugging Outcome field per brief.
+**Correctness** — prompt history matches shipping code. **Tone** — credits network logging for finding 422 vs click myth.
 
 ---
 
@@ -166,10 +166,10 @@ Document where final reports are generated and how reviewers open submission evi
 README tables: Playwright HTML → `reports/playwright-report/`; Allure raw → `reports/allure-results/` (gitignored); working Allure → `reports/allure-report/`; submission static Allure → `execution-report/index.html`. Flow: `npm test` → `allure:generate` → `allure:execution-report`.
 
 **Edits You Made:**  
-Added “Reports — where output is generated” with committed vs gitignored column. Windows `file:///` example path. `npm run allure:open:execution` CLI option. Linked CSV Status=Passed to Allure evidence in `project-info.md`.
+Top callout + project-info row: primary evidence = `execution-report/index.html`. How to open: IDE **right-click → Open in Browser**, File Explorer double-click, optional `npm run allure:open:execution`. Clarified no server/npm required for reviewers.
 
 **Reason for Edits:**  
-**Clarity** — Part B requires execution evidence; path must be obvious. **Correctness** — only `test-results` and `allure-results` gitignored as stated in `.gitignore`.
+**Clarity** — Part B requires execution evidence; path must be obvious for assessors. **Correctness** — static Allure is committed for review without re-running tests.
 
 ---
 
@@ -209,11 +209,11 @@ README manual run instructions (Type=Manual rows, `{timestamp}` in TestData). No
 
 | Document | Role | Last major update |
 |----------|------|-------------------|
-| `README.md` | Runbook: framework, data, commands, reports, Caveman | Project information + reports sections |
-| `project-info.md` | Part A AI workflow foundation (assessment rubric) | Full template restructure |
+| `README.md` | Runbook: framework, data, commands, reports, Caveman | Reviewer evidence callout + Open in Browser |
+| `project-info.md` | Part A AI workflow foundation (assessment rubric) | Start 2026-08-03 / Submit 2026-08-07 |
 | `requirements-risk-analysis.md` | AC, risks, traceability | Core scope + live-verify notes |
-| `ai-prompts/*.md` | Prompt history evidence | All five files expanded |
-| `execution-report/` | Static Allure submission HTML | Generated after local `npm test` |
+| `ai-prompts/*.md` | Prompt history evidence | Confirm×2 + profile + billing/postcode updates 2026-08-07 |
+| `execution-report/` | Static Allure submission HTML | Regenerate after full suite before final push |
 | `.cursor/rules/qa-toolshop.mdc` | Persistent AI context | SUT + cap + hygiene rules |
 
 _Documentation phase supports submission review without requiring author walkthrough._

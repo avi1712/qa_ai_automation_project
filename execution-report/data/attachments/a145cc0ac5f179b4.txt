@@ -1,0 +1,68 @@
+Step 1: Register — POST /users/register
+[authApi] POST /users/register
+[authApi] Register email: qa.api+1786050509125@example.com
+[authApi] Register status: 201
+Register status: 201
+Registered user successfully. User id: 01kzcefzgvw84djfq9rfvdj0hz
+Step 2: Login — POST /users/login
+[authApi] POST /users/login
+[authApi] Login email: qa.api+1786050509125@example.com
+[authApi] Login status: 200
+[authApi] Bearer token received: true
+Login status: 200
+Login passed and Bearer token received
+Step 3: Get products — GET /products
+[productsApi] GET /products
+[productsApi] Get products status: 200
+Products status: 200
+Selected product id: 01KZCE13K0Z5R9ETCFGMSC9HTS
+Selected product name: Combination Pliers
+Step 4: Create cart — POST /carts
+[cartApi] POST /carts
+[cartApi] Auth token used: true
+[cartApi] Create cart status: 201
+Create cart status: 201
+Cart created successfully. Cart id: 01kzceg14ds4fm97y8pckzkdgc
+Step 5: Add product to cart — POST /carts/01kzceg14ds4fm97y8pckzkdgc
+[cartApi] POST /carts/01kzceg14ds4fm97y8pckzkdgc
+[cartApi] Product id: 01KZCE13K0Z5R9ETCFGMSC9HTS
+[cartApi] Quantity: 1
+[cartApi] Add product status: 200
+Add to cart status: 200
+Add to cart response: { result: 'item added or updated' }
+Product added successfully to cart
+Step 6: Verify cart — GET /carts/01kzceg14ds4fm97y8pckzkdgc
+[cartApi] GET /carts/01kzceg14ds4fm97y8pckzkdgc
+[cartApi] Get cart status: 200
+Get cart status: 200
+Cart items count: 1
+Cart verified successfully. First product id: 01KZCE13K0Z5R9ETCFGMSC9HTS
+Step 7: Create invoice — POST /invoices (cash-on-delivery)
+Invoice payment method: cash-on-delivery
+Invoice cart id: 01kzceg14ds4fm97y8pckzkdgc
+[invoiceApi] POST /invoices
+[invoiceApi] Cart id: 01kzceg14ds4fm97y8pckzkdgc
+[invoiceApi] Payment method: cash-on-delivery
+[invoiceApi] Auth token used: true
+[invoiceApi] Create invoice status: 201
+Invoice status: 201
+Invoice response: {
+  billing_street: 'Zoey Shore',
+  billing_city: 'Hesselbury',
+  billing_state: 'Florida',
+  billing_country: 'TG',
+  billing_postal_code: '1234AA',
+  user_id: '01kzcefzgvw84djfq9rfvdj0hz',
+  invoice_date: '2026-08-06T21:08:33.680309Z',
+  invoice_number: 'INV-2026000013',
+  id: '01kzceg2rnyxrar1gvsexgb1j2',
+  created_at: '2026-08-06T21:08:33.000000Z',
+  subtotal: 14.15,
+  total: 14.15,
+  additional_discount_percentage: null,
+  additional_discount_amount: 0,
+  eco_discount_percentage: 0,
+  eco_discount_amount: 0
+}
+Invoice created successfully. Invoice number: INV-2026000013
+Invoice total: 14.15

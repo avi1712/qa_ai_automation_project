@@ -126,7 +126,7 @@ Before finalizing automation, what must be **verified live** on Toolshop UI and 
 UI walkthrough: profile page fields after login; cart after multi-item + qty; checkout address labels; payment step Confirm button (click twice); My Invoices list. API: register body needs `address` object; cart add path `POST /carts/{id}`; invoice `201` with COD + Bearer; `401` without token; product ids from `GET /products` not hardcoded. Document findings before merging specs.
 
 **Validation Notes:**  
-Resolved in Part B — see `ai-prompts/automation-and-debugging.md` Entry 5 (API live verify) and Entry 6 (UI `domcontentloaded` vs `networkidle`). `requirements-risk-analysis.md` ambiguities updated in practice via live runs, not blind AI assumptions.
+Resolved in Part B — API live verify (Entry 5); UI `domcontentloaded` (Entry 6); Confirm×2 + invoice (Entries 2, 14–15); profile fields via My profile link (Entry 16). Ambiguities closed by live runs, not blind AI assumptions. UI vs API billing: same `TG`+`1234AA`; UI stubs postcode-lookup.
 
 ---
 

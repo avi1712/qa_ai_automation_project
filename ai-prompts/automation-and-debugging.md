@@ -34,7 +34,7 @@ How should UI automation handle “press Confirm twice” for invoice without fl
 Model two explicit user actions on `data-test="finish"`: first Confirm → assert payment success toast; second Confirm → assert invoice/thank-you message. No single click + fixed sleep. Prefer `data-test` / role locators over brittle CSS.
 
 **Debugging Outcome:**  
-**Helped** for design — risk R4 documented. `CheckoutPage.js` implements COD + Confirm #1 + `payment-success-message` assert via `completeCashOnDeliveryAndVerifyToast()`. TC-UI-02 spec comment references second Confirm; **partial gap** — second click not yet in page object if SUT requires it for invoice id. Manual CSV and assessment still require Confirm×2; extend page object if live walkthrough shows invoice only after second Confirm.
+**Helped** for design — risk R4 documented. Angular Toolshop: Confirm #1 only runs payment check (`state=true` + “Payment was successful”); Confirm #2 calls `finishFunction` again and `POST /invoices`. Implemented in `CheckoutPage.completeCashOnDeliveryAndVerifyPaymentSuccess()`: hard-click Confirm #1 → payment success → hard-click Confirm #2 → assert “Thanks for your order” + `INV-` → return invoice number. Soft Playwright click often no-ops on Confirm #2 — use `click({ force: true })` + hide chat FAB. See Entries 14–15 for billing/postcode fixes that unblocked invoice 201.
 
 ---
 
@@ -209,4 +209,45 @@ Delete `.github/workflows/playwright.yml`. README and `project-info.md` state lo
 [Applied fix / rejected bad advice / re-run result]
 ```
 
-_Last full-suite verification: API green (2026-08-03). UI navigation + checkout fixes (2026-08-06)._
+---
+
+## Entry 14 — TC-UI-02 Confirm #2: click works, invoice POST 422 (billing)
+
+**Prompt:**  
+Confirm #2 hard-click runs but “Thanks for your order” never appears. Log network — what fails?
+
+**AI Response Summary:**  
+Wait for `POST /invoices` after Confirm #2. Live response was **422**: `billing_country` / postal format mismatch. Soft click was not the root cause once force-click worked.
+
+**Debugging Outcome:**  
+**Helped** — network wait showed real failure. API TC-API-02 still passes with same `TG` + `1234AA` in `billing-api.json`. Difference is UI-only: address step runs **postcode-lookup** and profile `getDetails` can overwrite fields. Align UI `billing.json` with API; stub lookup; fix fill race (Entry 15).
+
+---
+
+## Entry 15 — UI billing vs API: postcode-lookup stub + profile race
+
+**Prompt:**  
+API invoice with `TG`+`1234AA` returns 201. UI proceed-3 stays disabled or invoice 422. Fix using API payload as reference.
+
+**AI Response Summary:**  
+UI `AddressComponent` calls `GET /postcode-lookup` when country+postal+house set; failure blocks happy path. Logged-in `getDetails` can re-patch Albania / clear house number after fill. Select country by label **Togo** (control value `TG`); fill house last (`A42`); stub `/postcode*` to return API-aligned address JSON; wait for profile race then re-assert fields.
+
+**Debugging Outcome:**  
+**Helped** after live logs. `billing.json` matched `billing-api.json` (`TG`, `1234AA`, `A42`). Stub logged; country value `TG`; Confirm #2 → `POST /invoices` **201** → `INV-…`; My Invoices lists same number. TC-UI-02 passed (~33s).
+
+---
+
+## Entry 16 — TC-UI-01 profile assert after login
+
+**Prompt:**  
+Extend TC-UI-01: after login open My profile and assert first name, last name, email.
+
+**AI Response Summary:**  
+Use `ProfilePage`: user menu → link **My profile** (not invented `nav-profile`); assert `[data-test="first-name"|"last-name"|"email"]` values.
+
+**Debugging Outcome:**  
+**Helped** after fixing locator — live SUT uses role link “My profile” under last menuitem button. Spec + CSV updated; TC-UI-01 passed.
+
+---
+
+_Last verification: TC-UI-02 Confirm×2 + My Invoices green (2026-08-07). API TC-API-02 green with same TG billing. TC-UI-01 profile assert green._

@@ -1,0 +1,39 @@
+Step 1: Register user — POST /users/register
+[authApi] POST /users/register
+[authApi] Register email: qa.api+1786050507200@example.com
+[authApi] Register status: 201
+Register status: 201
+Register response: {
+  first_name: 'Qa',
+  last_name: 'Api',
+  dob: '1990-01-01',
+  phone: '5551234567',
+  email: 'qa.api+1786050507200@example.com',
+  id: '01kzcefxmn2qyrw5sz56z6dv03',
+  created_at: '2026-08-06 21:08:28',
+  address: {
+    street: 'Test Street 1',
+    house_number: null,
+    city: 'Testville',
+    state: 'TS',
+    country: 'US',
+    postal_code: '1234AA'
+  }
+}
+Register passed. User id: 01kzcefxmn2qyrw5sz56z6dv03
+Step 2: Login — POST /users/login
+[authApi] POST /users/login
+[authApi] Login email: qa.api+1786050507200@example.com
+[authApi] Login status: 200
+[authApi] Bearer token received: true
+Login status: 200
+Token type: bearer
+Bearer token received: true
+Login passed and Bearer token received
+Step 3: Create cart — POST /carts
+[cartApi] POST /carts
+[cartApi] Auth token used: true
+[cartApi] Create cart status: 201
+Create cart status: 201
+Create cart response: { id: '01kzcefys9w64sgvg0k2q79fqd' }
+Cart created successfully. Cart id: 01kzcefys9w64sgvg0k2q79fqd
