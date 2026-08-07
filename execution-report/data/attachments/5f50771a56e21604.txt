@@ -1,9 +1,0 @@
-Step 1: Create invoice without token — POST /invoices
-[invoiceApi] POST /invoices
-[invoiceApi] Cart id: invalid-cart-id-for-negative
-[invoiceApi] Payment method: cash-on-delivery
-[invoiceApi] Auth token used: false
-[invoiceApi] Create invoice status: 401
-Invoice status: 401
-Invoice response: { message: 'Unauthorized' }
-Invoice created without token failed correctly

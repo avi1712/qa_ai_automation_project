@@ -25,20 +25,7 @@ export default defineConfig({
   },
   reporter: [
     ['list'],
-    ['html', { outputFolder: 'reports/playwright-report', open: 'never' }],
-    [
-      'allure-playwright',
-      {
-        resultsDir: 'reports/allure-results',
-        detail: true,
-        suiteTitle: true,
-        environmentInfo: {
-          framework: 'playwright',
-          ui_base_url: 'https://practicesoftwaretesting.com',
-          api_base_url: 'https://api.practicesoftwaretesting.com',
-        },
-      },
-    ],
+    ['html', { outputFolder: 'execution-report', open: 'never' }],
   ],
   outputDir: 'reports/test-results',
   projects: [

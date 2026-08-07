@@ -7,24 +7,24 @@ Playwright (Prism-style) UI + API automation lives at the **repository root**.
 >
 > **Primary execution report (submission evidence):** [`execution-report/index.html`](execution-report/index.html)
 >
-> Open this Allure report first to see pass/fail status, test cases, steps, and attachments for all UI + API runs.  
+> Open this Playwright HTML report first to see pass/fail status, test cases, and console output for all UI + API runs.  
 > **Easiest in Cursor / VS Code:** go to `execution-report/index.html` → **right-click** → **Open in Browser**.  
 > **No server or npm required** — also works via double-click in File Explorer, drag into Chrome/Edge/Firefox, or **File → Open** in the browser.  
-> Optional CLI: `npm run allure:open:execution`
+> Optional CLI: `npm run report`
 
 ## Project information
 
 | Item | Detail |
 |------|--------|
 | **Framework** | [Playwright](https://playwright.dev/) (`@playwright/test` v1.54+) with **Prism-style** layout (page objects, API helpers, fixtures) |
-| **Reporting** | Playwright HTML reporter + [Allure](https://allurereport.org/) (`allure-playwright`) |
+| **Reporting** | Playwright HTML reporter (`execution-report/`) |
 | **Language** | JavaScript (Node.js) |
 | **Application under test** | Practice Software Testing — **Toolshop** |
 | **UI URL** | https://practicesoftwaretesting.com/ |
 | **API URL** | https://api.practicesoftwaretesting.com |
 | **API docs** | https://api.practicesoftwaretesting.com/api/documentation |
 | **Manual test cases** | `FunctionalTestCase.csv` (6 manual + 6 UI + 6 API rows) |
-| **Execution evidence (reviewers)** | **[`execution-report/index.html`](execution-report/index.html)** — static Allure report; open manually in any browser (no install/run needed) |
+| **Execution evidence (reviewers)** | **[`execution-report/index.html`](execution-report/index.html)** — Playwright HTML report; open manually in any browser (no install/run needed) |
 | **Workflow / AI context** | `project-info.md`, `requirements-risk-analysis.md`, `ai-prompts/` |
 
 ### Prerequisites
@@ -93,8 +93,8 @@ qa-ai-practical-assessment/
 ├── fixtures/
 ├── utils/
 ├── test-data/                # Static JSON test data
-├── reports/                  # Playwright + Allure working output
-├── execution-report/         # Static Allure HTML (submission evidence)
+├── reports/                  # Transient test artifacts (gitignored)
+├── execution-report/         # Playwright HTML report (submission evidence)
 └── .agents/skills/           # Caveman + related Cursor skills
 ```
 
@@ -170,71 +170,38 @@ UI and API rows in the same CSV map to automated specs via the `AutomationRef` c
 
 ## Reports — where output is generated
 
-**For reviewers:** the committed submission evidence is **`execution-report/index.html`**.  
-Working copies under `reports/` are for local runs; use `execution-report/` for assessment review.
+**For reviewers:** the committed submission evidence is **`execution-report/index.html`**.
 
 Running `npm test` (or any `playwright test` command) produces artifacts as follows:
 
 | Report / artifact | Path | When created | Committed? |
 |-------------------|------|--------------|------------|
-| **Playwright HTML (working)** | `reports/playwright-report/` (`index.html`) | Every test run | No (gitignored — local only) |
-| **Allure raw results** | `reports/allure-results/` | Every test run | No (gitignored) |
-| **Allure HTML (working)** | `reports/allure-report/` | After `npm run allure:generate` | No (gitignored — local only) |
-| **Static Allure (submission evidence)** | **`execution-report/index.html`** | After `npm run allure:execution-report` | **Yes — open this for review** |
+| **Playwright HTML (submission evidence)** | **`execution-report/index.html`** | Every test run | **Yes — open this for review** |
 | **Traces / screenshots / video** | `reports/test-results/` | On failure / retry (UI) | No (gitignored) |
 
 ### Reviewer evidence — `execution-report/index.html`
 
-This is the **primary report for assessment review**. It is a static Allure HTML bundle committed in the repo — reviewers can open it **manually in a browser** without running tests or starting a local server.
+This is the **primary report for assessment review**. It is a Playwright HTML report committed in the repo — reviewers can open it **manually in a browser** without running tests or starting a local server.
 
 | How to open | Action |
 |-------------|--------|
 | **IDE (recommended)** | In the repo tree, open `execution-report/index.html` → **right-click** → **Open in Browser** |
 | **Manual (any browser)** | Double-click `execution-report/index.html`, drag the file into Chrome/Edge/Firefox, or use **File → Open** in the browser |
-| **CLI (optional)** | `npm run allure:open:execution` |
+| **CLI (optional)** | `npm run report` |
 | **Windows file URL** | Paste in browser address bar: `file:///D:/Assignment/qa-ai-practical-assessment/execution-report/index.html` (adjust path to your clone) |
 
 After a fresh local run, regenerate before sharing:
 
 ```bash
 npm test
-npm run allure:execution-report
 ```
 
-### Generate Allure HTML (after tests finish)
-
-`npm test` writes raw Allure data to `reports/allure-results/`. **Generate HTML only after a test run:**
-
-```bash
-# 1) Run tests (creates reports/allure-results)
-npm test
-
-# 2) Optional local preview → reports/allure-report/ (gitignored)
-npm run allure:generate
-
-# 3) Static submission copy → execution-report/ (commit this folder)
-npm run allure:execution-report
-
-# Optional: generate submission report + open it
-npm run allure:report
-```
+The HTML reporter writes directly to `execution-report/` (configured in `playwright.config.js`).
 
 | Command | What it does |
 |---------|----------------|
-| `npm run allure:generate` | Builds Allure HTML → `reports/allure-report/` (local, gitignored) |
-| `npm run allure:execution-report` | Builds static Allure → `execution-report/` (submission evidence) |
-| `npm run allure:open` | Opens local `reports/allure-report` in the browser |
-| `npm run allure:open:execution` | Opens `execution-report` in the browser |
-| `npm run allure:clean` | Clears Allure results/report folders |
-| `npm run allure:report` | `allure:generate` + `allure:execution-report` + `allure:open` |
-
-**Typical end-to-end flow:**
-
-```bash
-npm test
-npm run allure:generate
-npm run allure:execution-report
-```
+| `npm test` | Runs all tests and refreshes `execution-report/` |
+| `npm run report` | Opens `execution-report/index.html` in the browser |
 
 ---
 

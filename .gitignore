@@ -1,23 +1,15 @@
-node_modules/
-.env
-*.log
-
-# Transient Playwright dumps (screenshots/videos/traces) — keep folder via .gitkeep
-reports/test-results/**
-!reports/test-results/.gitkeep
-test-results/
-/blob-report/
-/playwright/.cache/
-/playwright/.auth/
-
-# Allure working output (regenerated locally) — submission evidence is execution-report/ only
-reports/allure-results/**
-!reports/allure-results/.gitkeep
-reports/allure-report/
-
-# Playwright HTML report (regenerated locally by npm test)
-reports/playwright-report/
-playwright-report/
-
-# Static Allure submission evidence — keep committed:
-#   execution-report/
+node_modules/
+.env
+*.log
+
+# Transient Playwright dumps (screenshots/videos/traces) — keep folder via .gitkeep
+reports/test-results/**
+!reports/test-results/.gitkeep
+test-results/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
+
+# Playwright HTML submission evidence — keep committed:
+#   execution-report/
+
