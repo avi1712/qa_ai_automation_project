@@ -177,9 +177,9 @@ Running `npm test` (or any `playwright test` command) produces artifacts as foll
 
 | Report / artifact | Path | When created | Committed? |
 |-------------------|------|--------------|------------|
-| **Playwright HTML (final working)** | `reports/playwright-report/` (`index.html`) | Every test run | Yes (after run) |
+| **Playwright HTML (working)** | `reports/playwright-report/` (`index.html`) | Every test run | No (gitignored — local only) |
 | **Allure raw results** | `reports/allure-results/` | Every test run | No (gitignored) |
-| **Allure HTML (working)** | `reports/allure-report/` | After `npm run allure:generate` | Yes |
+| **Allure HTML (working)** | `reports/allure-report/` | After `npm run allure:generate` | No (gitignored — local only) |
 | **Static Allure (submission evidence)** | **`execution-report/index.html`** | After `npm run allure:execution-report` | **Yes — open this for review** |
 | **Traces / screenshots / video** | `reports/test-results/` | On failure / retry (UI) | No (gitignored) |
 
@@ -209,21 +209,21 @@ npm run allure:execution-report
 # 1) Run tests (creates reports/allure-results)
 npm test
 
-# 2) Working Allure HTML → reports/allure-report/
+# 2) Optional local preview → reports/allure-report/ (gitignored)
 npm run allure:generate
 
-# 3) Static submission copy → execution-report/
+# 3) Static submission copy → execution-report/ (commit this folder)
 npm run allure:execution-report
 
-# Optional: generate both + open working report in browser
+# Optional: generate submission report + open it
 npm run allure:report
 ```
 
 | Command | What it does |
 |---------|----------------|
-| `npm run allure:generate` | Builds Allure HTML → `reports/allure-report/` |
-| `npm run allure:execution-report` | Builds static Allure → `execution-report/` (includes `index.html`) |
-| `npm run allure:open` | Opens `reports/allure-report` in the browser |
+| `npm run allure:generate` | Builds Allure HTML → `reports/allure-report/` (local, gitignored) |
+| `npm run allure:execution-report` | Builds static Allure → `execution-report/` (submission evidence) |
+| `npm run allure:open` | Opens local `reports/allure-report` in the browser |
 | `npm run allure:open:execution` | Opens `execution-report` in the browser |
 | `npm run allure:clean` | Clears Allure results/report folders |
 | `npm run allure:report` | `allure:generate` + `allure:execution-report` + `allure:open` |
